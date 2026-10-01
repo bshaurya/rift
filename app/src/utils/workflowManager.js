@@ -89,6 +89,7 @@ class WorkflowManager {
   }
   
   async handleMeetAndEmailWorkflow(prompt, handlers) {
+    return { type: 'error', error: 'Calendar and custom workflows are blocked in the single-event reliability MVP.' };
     try {
       return await handlers.meet.handleCreateMeeting(prompt, handlers.shell, handlers.win);
     } catch (err) {
@@ -206,6 +207,7 @@ class WorkflowManager {
   }
   
   async handleCalendarAndDocsWorkflow(prompt, handlers) {
+    return { type: 'error', error: 'Calendar and custom workflows are blocked in the single-event reliability MVP.' };
     try {
       if (!process.env.GEMINI_API_KEY) {
         return { type: 'error', error: 'Gemini API key required for workflows' };
@@ -318,6 +320,7 @@ class WorkflowManager {
   }
   
   async handleCustomWorkflow(prompt, handlers) {
+    return { type: 'error', error: 'Calendar and custom workflows are blocked in the single-event reliability MVP.' };
     try {
       console.log('[workflowManager] Starting custom workflow for prompt:', prompt);
       if (/\b(create|make|set up|schedule)\s+(a\s+)?(google\s+)?meet(ing)?\b/i.test(prompt)) {

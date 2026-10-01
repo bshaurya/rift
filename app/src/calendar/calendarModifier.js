@@ -98,6 +98,7 @@ async function determineEventChanges(prompt, event) {
 }
 
 async function modifyEvent(auth, eventId, changes) {
+  throw new Error('This calendar write is blocked in the single-event reliability MVP.');
   try {
     const calendar = google.calendar({ 
       version: 'v3', 
@@ -149,6 +150,7 @@ async function modifyEvent(auth, eventId, changes) {
 }
 
 async function handleEventModification(prompt, auth) {
+  throw new Error('This calendar write is blocked in the single-event reliability MVP.');
   try {
     const calendar = google.calendar({ 
       version: 'v3', 

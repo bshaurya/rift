@@ -2,6 +2,9 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('rift', {
   parseAndCreateEvent: (input) => ipcRenderer.invoke('parse-and-create-event', input),
+  confirmCalendar: (id, digest) => ipcRenderer.invoke('calendar-confirm', id, digest),
+  cancelCalendar: (id, digest) => ipcRenderer.invoke('calendar-cancel', id, digest),
+  calendarOutcomes: () => ipcRenderer.invoke('calendar-outcomes'),
   startAuth: () => ipcRenderer.invoke('start-auth'),
   oauthCallback: (code) => ipcRenderer.invoke('oauth-callback', code),
   onFocusInput: (cb) => ipcRenderer.on('focus-input', cb),

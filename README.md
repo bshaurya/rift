@@ -5,10 +5,11 @@ Rift is an AI-powered personal assistant that helps you manage your calendar eve
 ## Features
 
 ### Calendar Management
-- Create calendar events with natural language
+- Propose one event with natural language, review its exact times and timezone, then confirm or cancel
 - Query your calendar for upcoming events
-- Delete events
-- Modify existing events
+- Calendar deletion, modification, Meet writes, and calendar/custom workflows are blocked in the bounded MVP
+
+See [Calendar Reliability](docs/calendar-reliability.md) for the schema, recorded outcomes, limitations, and a 75-second demo.
 
 ### Email Management
 - View unread emails
@@ -60,17 +61,25 @@ Rift is an AI-powered personal assistant that helps you manage your calendar eve
 
 ### Setup
 1. Clone the repository
-2. Install dependencies: `npm install`
-3. Create a .env file with required API keys and credentials
-4. Start the app: `npm start`
+2. Enter the application directory: `cd rift/app`
+3. Install dependencies: `npm ci`
+4. Create a local `.env` file with required API keys and credentials
+5. Start the app: `npm start`
+
+The calendar tests and fake demo need only Node.js 22 or later. From `app/`, run `npm test` and `npm run demo:calendar`; dependency installation and credentials are unnecessary for these commands.
 
 ### Environment Variables
 - `GOOGLE_CLIENT_ID`: Google OAuth client ID
 - `GOOGLE_CLIENT_SECRET`: Google OAuth client secret
 - `GOOGLE_API_KEY`: Google API key
 - `GEMINI_API_KEY`: Google Gemini API key
+- `GEMINI_MODEL`: A supported Gemini model ID for the calendar parser
+
+Environment files are excluded from application packaging. Packaged runs must receive configuration through the launching environment. Do not place credentials in source control or release artifacts.
 
 ### Building
-- Build for macOS: `npm run build:mac`
-- Build for Windows: `npm run build:win`
-- Build for Linux: `npm run build:linux`
+- Build for the current platform from `app/`: `npm run build`
+
+<!-- This document follows common-doc-guidelines.md.
+See github.com/jlevy/practical-prose and review guidelines before editing.
+-->

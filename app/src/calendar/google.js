@@ -205,89 +205,11 @@ async function handleOAuthCallback(code) {
   }
 }
 
-async function createEvent(parsed) {
-  try {
-    if (typeof parsed === 'string') {
-      console.log('[google] Received chat response instead of event data:', parsed);
-      throw new Error(parsed);
-    }
-    
-    const auth = await ensureAuth(); 
-    const calendar = google.calendar({ 
-      version: 'v3', 
-      auth: auth,
-      key: process.env.GOOGLE_API_KEY
-    });
-    
-    if (!parsed || !parsed.title) {
-      console.error('[google] Missing title in parsed event:', parsed);
-      throw new Error('Event parsing failed: missing event title.');
-    }
-    
-    if (!parsed.start || !parsed.end) {
-      console.error('[google] Missing start or end time in parsed event:', parsed);
-      throw new Error('Event parsing failed: missing start or end time.');
-    }
-    
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/New_York';
-    
-    const event = {
-      summary: parsed.title,
-      start: { dateTime: parsed.start, timeZone: tz },
-      end: { dateTime: parsed.end, timeZone: tz },
-      location: parsed.location,
-      description: parsed.description
-    };
-    
-    if (parsed.recurrence && Array.isArray(parsed.recurrence)) {
-      event.recurrence = parsed.recurrence;
-    }
-    
-    console.log('[google] Creating event:', event);
-    
-    const res = await calendar.events.insert({
-      calendarId: 'primary',
-      resource: event
-    });
-    
-    console.log('[google] Google Calendar API response:', res.data);
-    return res.data;
-  }
-  catch (err) {
-    if (err.response && err.response.data) {
-      console.error('[google] Google Calendar API error:', err.response.data);
-      throw new Error('Google Calendar API error: ' + JSON.stringify(err.response.data));
-    }
-    else {
-      console.error('[google] Google Calendar API error:', err);
-      throw err;
-    }
-  }
+async function createEvent() {
+  throw new Error('Calendar writes require a reviewed proposal. Use the calendar gate.');
 }
-
-async function deleteEvent(eventId) {
-  try {
-    const auth = await ensureAuth();
-    const calendar = google.calendar({ 
-      version: 'v3', 
-      auth: auth,
-      key: process.env.GOOGLE_API_KEY
-    });
-    
-    await calendar.events.delete({ calendarId: 'primary', eventId });
-    console.log('[google] Deleted event:', eventId);
-    return true;
-  }
-  catch (err) {
-    if (err.response && err.response.data) {
-      console.error('[google] Google Calendar API error:', err.response.data);
-      throw new Error('Google Calendar API error: ' + JSON.stringify(err.response.data));
-    }
-    else {
-      console.error('[google] Google Calendar API error:', err);
-      throw err;
-    }
-  }
+async function deleteEvent() {
+  throw new Error('Calendar deletion is blocked until explicit candidate selection is supported.');
 }
 
 async function validateAndRefreshAuth() {

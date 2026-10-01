@@ -8,8 +8,11 @@ else {
   require('dotenv').config();
 }
 const isDev = !app || !app.isPackaged;
-const { createEvent, ensureAuth, getAuthUrl, handleOAuthCallback, deleteEvent } = require('./calendar/google');
-const { parseEvent } = require('./calendar/parser');
+const { ensureAuth, getAuthUrl, handleOAuthCallback } = require('./calendar/google');
+const { createCalendarService } = require('./calendar/service');
+let calendarService;
+const getCalendarService = () => calendarService ||= createCalendarService(path.join(app.getPath('userData'), 'calendar-operations.json'));
+if (!app.requestSingleInstanceLock()) app.quit();
 const { google } = require('googleapis');
 const emailFunctions = require('./email/email');
 const emailHandlers = require('./email/email-handlers');
@@ -129,30 +132,6 @@ function isCalendarQuery(prompt) {
          !/\b(add|create|schedule|set up|make|new)\b/i.test(prompt.substring(0, 20));
 }
 
-function isDeleteEvent(prompt) {
-  return /\b(delete|remove|cancel)\b/i.test(prompt);
-}
-
-function isModifyEvent(prompt) {
-  return /\b(change|modify|update|edit|rename|reschedule|add|invite)\b/i.test(prompt) && 
-         /\b(event|meeting|appointment|calendar)\b/i.test(prompt);
-}
-
-function extractTitleForDelete(prompt) {
-  const quotedMatch = prompt.match(/['"]([^'"]+)['"]/)
-  if (quotedMatch){
-    return quotedMatch[1].trim();
-  }
-  
-  const m = prompt.match(/(?:delete|remove|cancel)\s+(.+?)(?:\s+from calendar|\s+from|\s+at|\s+on|$)/i);
-  return m ? m[1].trim() : null;
-}
-
-function extractDateFromPrompt(prompt) {
-  const m = prompt.match(/(today|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\d{4}-\d{2}-\d{2})/i);
-  return m ? m[1].toLowerCase() : null;
-}
-
 async function queryCalendar(prompt) {
   try {
     const { ensureAuth } = require('./calendar/google');
@@ -260,66 +239,6 @@ async function queryCalendar(prompt) {
     }
 
     return `Error: ${err.message}`;
-  }
-}
-
-async function deleteEventByPrompt(prompt) {
-  try {
-    const { ensureAuth, deleteEvent } = require('./calendar/google');
-    const { identifyEventToDelete } = require('./calendar/deleteHelper');
-    const auth = await ensureAuth(win);
-    const calendar = google.calendar({ 
-      version: 'v3', 
-      auth: auth,
-      key: process.env.GOOGLE_API_KEY
-    });
-    
-    const now = new Date();
-    const timeMin = now.toISOString();
-    const timeMax = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
-    
-    const eventsRes = await calendar.events.list({
-      calendarId: 'primary',
-      timeMin,
-      timeMax,
-      singleEvents: true,
-      orderBy: 'startTime',
-      maxResults: 10
-    });
-    
-    const events = eventsRes.data.items || [];
-    if (events.length === 0) throw new Error('No upcoming events found to delete.');
-    
-    console.log(`[main] Found ${events.length} upcoming events`);
-    
-    const geminiMatch = await identifyEventToDelete(prompt, events);
-    
-    if (geminiMatch) {
-      console.log(`[main] Gemini identified event to delete: ${geminiMatch.summary}`);
-      await deleteEvent(geminiMatch.id);
-      return `Deleted event: ${geminiMatch.summary}`;
-    }
-    
-    const title = extractTitleForDelete(prompt);
-    if (!title) throw new Error('Could not determine which event to delete. Please specify the event name.');
-    
-    console.log(`[main] Searching for event to delete with title: "${title}"`);
-    
-    const match = events.find(ev => ev.summary && ev.summary.toLowerCase().includes(title.toLowerCase()));
-    if (!match) throw new Error('No matching event found to delete.');
-    
-    await deleteEvent(match.id);
-    return `Deleted event: ${match.summary}`;
-  }
-  catch (err) {
-    console.error('[main] Error deleting event:', err);
-    if (err.message === 'auth required') {
-      const { getAuthUrl } = require('./calendar/google');
-      const authUrl = await getAuthUrl();
-      shell.openExternal(authUrl);
-      return 'Authentication required. Please check your browser to complete the sign-in process.';
-    }
-    throw err;
   }
 }
 
@@ -471,12 +390,13 @@ function setupEmailHandlers() {
 
 ipcMain.handle('route-prompt', async (event, prompt) => {
   try {
-    const { ensureAuth, getAuthUrl, createEvent, validateAndRefreshAuth } = require('./calendar/google');
+    const { ensureAuth, getAuthUrl, validateAndRefreshAuth } = require('./calendar/google');
     const { detectIntent } = require('./utils/intentDetector');
-    if (/\b(create|make|set up|schedule)\s+(a\s+)?(google\s+)?meet(ing)?\b/i.test(prompt)) {
-      console.log('[main] Detected Google Meet creation request, handling directly');
-      const meetHandlers = require('./meet/meet-handlers');
-      return await meetHandlers.handleCreateMeeting(prompt, shell, win);
+    // Explicit MVP commands avoid probabilistic intent/workflow routing.
+    if (/^(create|add|schedule)\s+(?:(?:a|an|single)\s+)?(?:calendar\s+)?event\b/i.test(prompt.trim())) return await getCalendarService().propose(prompt);
+    if (/^(delete|remove|cancel|modify|change|update)\b/i.test(prompt.trim()) && /\b(calendar|event|meeting|appointment)\b/i.test(prompt)) return { type: 'error', error: 'This calendar write is blocked in the single-event reliability MVP.' };
+    if (/\b(create|make|set up|schedule)\s+(a\s+)?(google\s+)?meet\b/i.test(prompt)) {
+      return { type: 'error', error: 'Google Meet calendar writes are blocked in the single-event reliability MVP.' };
     }
     
     const handlers = {
@@ -493,6 +413,7 @@ ipcMain.handle('route-prompt', async (event, prompt) => {
     if (!/\b(spotify|music|song|play|pause|resume|next|previous|skip|playlist)\b/i.test(prompt)) {
       const workflow = await workflowManager.detectWorkflow(prompt);
       if (workflow && workflow.isWorkflow) {
+        if (['CALENDAR_AND_DOCS', 'MEET_AND_EMAIL', 'CUSTOM'].includes(workflow.workflowType)) return { type: 'error', error: 'Calendar and custom workflows are blocked in the single-event reliability MVP.' };
         console.log(`[main] Detected workflow: ${workflow.workflowType}`);
         if (workflow.workflowType === 'MEET_AND_EMAIL' || (workflow.workflowType === 'CUSTOM' && /\b(meet|meeting)\b/i.test(prompt))) {
           console.log('[main] Using meet handler directly for workflow');
@@ -539,6 +460,8 @@ ipcMain.handle('route-prompt', async (event, prompt) => {
     
     const intent = await detectIntent(prompt);
     console.log(`[main] Detected intent: ${intent} for prompt: "${prompt}"`);
+    if (intent === 'CALENDAR_CREATE') return await getCalendarService().propose(prompt);
+    if (['CALENDAR_DELETE', 'CALENDAR_MODIFY', 'MEET_CREATE', 'MEET_SHARE'].includes(intent)) return { type: 'error', error: 'This calendar write is blocked in the single-event reliability MVP.' };
     
     if (global.lastEmailSearchResults && /\b(open|view|show|read)\s+(email|mail|message)\s+#?(\d+)\b/i.test(prompt)) {
       const match = prompt.match(/\b(open|view|show|read)\s+(email|mail|message)\s+#?(\d+)\b/i);
@@ -704,38 +627,6 @@ ${emailContent.suggestedResponse ? "\n\nSuggested response available in the view
       return { type: 'error', error: `Authentication error: ${err.message}` };
     }
     
-    if (intent === 'CALENDAR_DELETE') {
-      try {
-        const response = await deleteEventByPrompt(prompt);
-        return { type: 'delete', response };
-      } catch (err) {
-        console.error('[main] Delete event error:', err);
-        return { type: 'error', error: `Failed to delete event: ${err.message}` };
-      }
-    }
-    
-    if (intent === 'CALENDAR_MODIFY') {
-      try {
-        const calendarModifier = require('./calendar/calendarModifier');
-        const auth = await ensureAuth(win);
-        const result = await calendarModifier.handleEventModification(prompt, auth);
-        
-        if (result.success) {
-          return { 
-            type: 'event-modified', 
-            success: true, 
-            result: result.event,
-            changes: result.changes
-          };
-        } else {
-          return { type: 'error', error: result.error };
-        }
-      } catch (err) {
-        console.error('[main] Event modification error:', err);
-        return { type: 'error', error: `Failed to modify event: ${err.message}` };
-      }
-    }
-    
     if (intent === 'CALENDAR_QUERY') {
       try {
         const response = await queryCalendar(prompt);
@@ -746,31 +637,6 @@ ${emailContent.suggestedResponse ? "\n\nSuggested response available in the view
       }
     }
     
-    if (intent === 'CALENDAR_CREATE') {
-      try {
-        const parsed = await parseEvent(prompt);
-        if (typeof parsed === 'string') {
-          return { type: 'chat', response: parsed };
-        }
-        
-        if (!parsed.start || !parsed.end) {
-          return { 
-            type: 'chat', 
-            response: `I understood you want to create an event titled "${parsed.title}", but I need more information about the date and time.` 
-          };
-        }
-        
-        const result = await createEvent(parsed);
-        return { type: 'event', success: true, result };
-      } catch (err) {
-        console.error('[main] Error in event creation:', err);
-        if (err.message && err.message.includes('auth')) {
-          return { type: 'error', error: 'Authentication issue: ' + err.message };
-        }
-        return { type: 'chat', response: 'I understood your request but encountered an issue: ' + err.message };
-      }
-    }
-    
     return { type: 'chat', response: 'I can help you with calendar events, emails, Google Drive files, Google Docs, Google Meet meetings, and Spotify music. What would you like to do?' };
   } catch (err) {
     console.error('[main] Unhandled error in route-prompt:', err);
@@ -778,23 +644,10 @@ ${emailContent.suggestedResponse ? "\n\nSuggested response available in the view
   }
 });
 
-ipcMain.handle('parse-and-create-event', async (event, input) => {
-  try {
-    const parsed = await parseEvent(input);
-    await ensureAuth(win);
-    const result = await createEvent(parsed);
-    console.log('[main] Event created successfully:', result);
-    return { success: true, result };
-  } catch (err) {
-    console.error('[main] Error in parse-and-create-event:', err);
-    if (err.message === 'auth required') {
-      const authUrl = await getAuthUrl();
-      shell.openExternal(authUrl);
-      return { success: false, error: 'Authentication required. Please check your browser.' };
-    }
-    return { success: false, error: err.message };
-  }
-});
+ipcMain.handle('parse-and-create-event', async (_event, input) => getCalendarService().propose(input));
+ipcMain.handle('calendar-confirm', async (_event, operationId, digest) => getCalendarService().confirm(operationId, digest));
+ipcMain.handle('calendar-cancel', async (_event, operationId, digest) => getCalendarService().cancel(operationId, digest));
+ipcMain.handle('calendar-outcomes', () => getCalendarService().outcomes());
 
 ipcMain.handle('start-auth', async () => {
   const url = await getAuthUrl();

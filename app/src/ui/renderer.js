@@ -106,7 +106,10 @@ async function routePrompt() {
     const res = await window.rift.routePrompt(effectivePrompt);
     console.log('Response received:', res);
     
-    if (res.type === 'event') {
+    if (res.type === 'calendar-proposal') {
+      clearFollowUpMode();
+      showCalendarProposal(res.proposal);
+    } else if (res.type === 'event') {
       if (res.success) {
         showStatus('Event added to Google Calendar!');
         input.value = '';
@@ -410,3 +413,39 @@ window.rift.onFocusInput(() => {
   input.focus();
   input.select();
 });
+
+function showCalendarProposal(proposal) {
+  responseDiv.replaceChildren();
+  responseDiv.style.display = 'block';
+  const details = document.createElement('pre');
+  details.style.whiteSpace = 'pre-wrap';
+  const event = proposal.action;
+  details.textContent = `Operation: ${proposal.operationId}\nStatus: ${proposal.status}\nCalendar: primary\n${event.title}\nStart: ${event.start}\nEnd: ${event.end}\nTimezone: ${event.timeZone}\nLocation: ${event.location || '(none)'}\nDescription: ${event.description || '(none)'}${proposal.reason ? '\n' + proposal.reason : ''}`;
+  responseDiv.append(details);
+  showStatus(proposal.status === 'proposed' ? 'Review before adding to Google Calendar' : `Calendar operation: ${proposal.status}`);
+  if (proposal.status === 'proposed') {
+    const buttons = [];
+    for (const [label, method] of [['Confirm', 'confirmCalendar'], ['Cancel', 'cancelCalendar']]) {
+      const button = document.createElement('button');
+      button.textContent = label;
+      buttons.push(button);
+      button.addEventListener('click', async () => {
+        buttons.forEach(b => { b.disabled = true; });
+        try {
+          const result = await window.rift[method](proposal.operationId, proposal.digest);
+          if (result.proposal) showCalendarProposal(result.proposal);
+          else showStatus(result.error, '#ffa0a0');
+        } catch {
+          showStatus('Could not read the outcome. Restart and inspect recorded outcomes before retrying.', '#ffa0a0');
+        }
+      });
+      responseDiv.append(button);
+    }
+  }
+  resizeWindowToFitContent();
+}
+
+window.rift.calendarOutcomes().then(records => {
+  const interrupted = records.filter(r => r.status === 'uncertain' || r.status === 'stale');
+  if (interrupted.length) showCalendarProposal(interrupted.at(-1));
+}).catch(() => showStatus('Calendar journal unavailable; writes are blocked.', '#ffa0a0'));
