@@ -37,3 +37,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local harness state and dependencies
+harness/node_modules/
+**/operations.sqlite*
+**/fake-calendar.sqlite*
+**/google-credentials.json

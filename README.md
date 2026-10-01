@@ -1,6 +1,6 @@
 # Rift
 
-Rift is an AI-powered personal assistant that helps you manage your calendar events and emails through a simple, natural language interface.
+Rift supplies reviewed calendar tools for Codex and Claude through a local MCP harness. Start with the [harness setup and demo](harness/README.md). The existing Electron assistant in `app/` also supports calendar queries and email tasks.
 
 ## Features
 
