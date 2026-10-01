@@ -1,6 +1,17 @@
 # Rift
 
-Rift supplies shared calendar operations for Codex and Claude through a local MCP harness. It preserves proposals across agent sessions, requires local review before creation, and reconciles uncertain outcomes through provider reads. Start with the [harness setup and demo](harness/README.md). The existing Electron assistant in `app/` also supports calendar queries and email tasks.
+Rift tests whether an agent's calendar actions produce the intended result. Its offline environment preserves simulated events across calls and restarts, injects failures such as a lost response after a successful write, and checks the final state for duplicates and unintended changes. Connect an MCP host or run the included action clients. Start with the [agent lab](harness/LAB.md).
+
+```sh
+cd harness
+npm ci
+npm test
+npm run demo:lab
+```
+
+The demo compares a deliberately unsafe retry client with Rift's existing action client across six scenarios. It uses no model or Google account. Reports contain individual checks, initial and final events, and an ordered call trace; these scripted results are not measurements of Codex or Claude performance.
+
+The [reviewed calendar harness](harness/README.md) also supports Google Calendar through local authentication and explicit terminal review. The Electron application in `app/` provides the desktop features below.
 
 ## Features
 

@@ -27,3 +27,12 @@ jobs:
         working-directory: harness
       - run: npm run demo
         working-directory: harness
+      - run: npm run lab -- demo --out .lab-runs/ci
+        working-directory: harness
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-lab-reports
+          path: harness/.lab-runs/ci/**/*.json
+          include-hidden-files: true
+          if-no-files-found: ignore

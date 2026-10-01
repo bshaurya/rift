@@ -42,4 +42,6 @@ dist-ssr
 harness/node_modules/
 **/operations.sqlite*
 **/fake-calendar.sqlite*
+**/lab-calendar.sqlite*
+harness/.lab-runs/
 **/google-credentials.json

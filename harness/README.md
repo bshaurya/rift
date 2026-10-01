@@ -1,5 +1,7 @@
 # Rift Calendar Harness
 
+For offline testing of agent actions, start with the [agent lab](LAB.md). Its separate entry point exposes simulated writes and requires no Google account. This document describes the reviewed execution harness.
+
 Rift gives Codex and Claude a shared calendar tool over MCP. The host handles conversation and planning; Rift reads availability, validates structured events, checks conflicts, and records execution after local review. The server has no embedded model, Gemini dependency, or Electron dependency.
 
 Rift's extra value is the shared operation record: a proposal made in Claude can be inspected in Codex, approved locally, and checked again after either host restarts. It deduplicates the same action across clients and preserves uncertainty instead of silently retrying calendar insertion. Basic calendar access alone is not its differentiator. A useful daily-workflow evaluation still requires comparing this review flow against the host's existing calendar tools; offline tests do not establish that it saves time.
