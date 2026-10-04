@@ -6,6 +6,7 @@ import { ScenarioCalendar } from './calendar.js';
 import { scenarios, loadScenario } from './scenarios.js';
 import { initializeRun, runClient, checkRun, runDemo } from './runner.js';
 import { serveLab } from './server.js';
+import { writeReport } from './report.js';
 
 export async function main(args = process.argv.slice(2)) {
   const { values, positionals } = parseArgs({ args, allowPositionals: true, options: {
@@ -13,15 +14,20 @@ export async function main(args = process.argv.slice(2)) {
     out: { type: 'string' }, run: { type: 'string' }, label: { type: 'string' }
   } });
   const [command] = positionals;
-  if (positionals.length !== 1) throw new Error('Usage: lab list | init | run | serve | check | demo. See harness/LAB.md.');
+  if (positionals.length !== 1) throw new Error('Usage: lab list | init | run | serve | check | demo | report. See harness/LAB.md.');
   if (command === 'list') {
     console.log(JSON.stringify(scenarios.map(({ id, description }) => ({ id, description })), null, 2));
     return 0;
   }
-  if (!['init', 'run', 'serve', 'check', 'demo'].includes(command)) throw new Error('Unknown lab command.');
-  const rawDirectory = ['serve', 'check'].includes(command) ? values.run : values.out;
-  if (!rawDirectory) throw new Error(['serve', 'check'].includes(command) ? '--run is required.' : '--out is required.');
+  if (!['init', 'run', 'serve', 'check', 'demo', 'report'].includes(command)) throw new Error('Unknown lab command.');
+  const rawDirectory = ['serve', 'check', 'report'].includes(command) ? values.run : values.out;
+  if (!rawDirectory) throw new Error(['serve', 'check', 'report'].includes(command) ? '--run is required.' : '--out is required.');
   const directory = path.resolve(rawDirectory);
+  if (command === 'report') {
+    if (!values.out) throw new Error('--out is required. Choose a new HTML file.');
+    console.log(JSON.stringify(writeReport(directory, path.resolve(values.out)), null, 2));
+    return 0;
+  }
   if (command === 'serve') {
     const calendar = new ScenarioCalendar(directory);
     try { await serveLab(calendar); } catch (error) { calendar.close(); throw error; }
