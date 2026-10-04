@@ -3,6 +3,7 @@ const { google } = require('googleapis');
 const { ensureAuth } = require('../calendar/google');
 
 async function createMeeting(title, startTime, endTime, attendees = [], description = '') {
+  throw new Error('This calendar write is blocked in the single-event reliability MVP.');
   try {
     const auth = await ensureAuth();
     const calendar = google.calendar({ version: 'v3', auth });
@@ -75,6 +76,7 @@ async function getMeeting(eventId) {
 }
 
 async function updateMeeting(eventId, updates) {
+  throw new Error('This calendar write is blocked in the single-event reliability MVP.');
   try {
     const auth = await ensureAuth();
     const calendar = google.calendar({ version: 'v3', auth });
@@ -120,6 +122,7 @@ async function updateMeeting(eventId, updates) {
 }
 
 async function addAttendeesToMeeting(eventId, newAttendees) {
+  throw new Error('This calendar write is blocked in the single-event reliability MVP.');
   try {
     const auth = await ensureAuth();
     const calendar = google.calendar({ version: 'v3', auth });

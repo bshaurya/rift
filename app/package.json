@@ -6,7 +6,9 @@
   "author": "Rift Team",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "test": "node --test test/*.test.js",
+    "demo:calendar": "node demo/calendar.js"
   },
   "dependencies": {
     "axios": "^1.9.0",
@@ -42,7 +44,6 @@
     ],
     "files": [
       "**/*",
-      ".env",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
       "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
       "!**/node_modules/*.d.ts",
@@ -53,10 +54,12 @@
       "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
       "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
-      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
-    ],
-    "extraResources": [
-      ".env"
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!**/.env",
+      "!**/.env.*",
+      "!**/calendar-operations.json",
+      "!test/**",
+      "!demo/**"
     ],
     "asar": true
   }
