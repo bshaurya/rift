@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "external-codex-smoke-test",
+  "model": "gpt-5.5",
+  "reasoning": "medium",
+  "cliVersion": "codex-cli 0.143.0",
+  "platform": "darwin",
+  "nodeVersion": "v25.5.0",
+  "prompt": "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty.",
+  "samplesPerScenario": 1,
+  "sourceHashes": {
+    "harness/src/lab/calendar.js": "5fcf3f9066d079464423e9321aac4011afbdab9deab339e38a76c790887dae51",
+    "harness/src/lab/evaluate.js": "77be2373090d0cbcc09272378c412c35b07538473dd5215240dc67472633eb89",
+    "harness/src/lab/runner.js": "55146c011c207dc234510cfd7de63aaf0fe57f0655f2addaf851110fb3c5249f",
+    "harness/src/lab/schema.js": "7856f7bf61eefe89945babfe0368f6d8c5e7bdc92773478dd0b502932cdad861",
+    "harness/src/lab/scenarios.js": "5305565aa46f64b1cbb1513ed33e75716c0890d3c98f84a4da751ce637f610c3",
+    "harness/src/lab/server.js": "a94c812b7ff319f261e8a4664b4ca323b2f2f7705420dba16f630aa5b77b35e3",
+    "app/src/calendar/gate.js": "bf5bc3520427c08c2f9390e48d7d31ff7da482b001c1b59665540742de025cce",
+    "harness/package-lock.json": "c3aff940331b48ed740227fe5e69d090f269bbf6a6c4b93d8ef0acebdecfd04c",
+    "harness/demo/codex.js": "5b9a968ee1088c52040195d020641b02bad9b810e0f75a1fa19301f59f949699"
+  },
+  "results": [
+    {
+      "scenario": "clean-create",
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "elapsedSeconds": 26.41,
+      "report": "clean-create.json"
+    },
+    {
+      "scenario": "commit-timeout",
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "elapsedSeconds": 27.22,
+      "report": "commit-timeout.json"
+    },
+    {
+      "scenario": "timeout-before",
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "elapsedSeconds": 25.22,
+      "report": "timeout-before.json"
+    },
+    {
+      "scenario": "rate-limit",
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "elapsedSeconds": 12.76,
+      "report": "rate-limit.json"
+    },
+    {
+      "scenario": "malformed-ack",
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "elapsedSeconds": 19.38,
+      "report": "malformed-ack.json"
+    },
+    {
+      "scenario": "concurrent-change",
+      "outcome": "failed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "elapsedSeconds": 18.71,
+      "report": "concurrent-change.json"
+    }
+  ],
+  "date": "2026-10-04",
+  "sourceCommit": "71704931b51ce5ee2baf7254206c075328947ad3",
+  "setupAttempts": [
+    {
+      "requestedModel": "gpt-6.1-sol",
+      "outcome": "startup-rejection",
+      "providerCalls": 0,
+      "reason": "The standalone CLI rejected this model for the ChatGPT account."
+    },
+    {
+      "requestedModel": "CLI default",
+      "purpose": "setup probes",
+      "scenarios": [
+        "commit-timeout",
+        "clean-create"
+      ],
+      "observedDefault": "gpt-5.5",
+      "outcome": "both passed; excluded from the six-case pinned suite"
+    }
+  ]
+}
