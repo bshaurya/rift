@@ -1,0 +1,10 @@
+{
+  "name": "rift-calendar-harness",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reviewed calendar execution tools for Codex and Claude over MCP",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": { "start": "node src/cli.js serve", "test": "node --test test/*.test.js", "demo": "node demo/session.js" },
+  "dependencies": { "@modelcontextprotocol/sdk": "^1.0.0", "zod": "^3.25.0" }
+}

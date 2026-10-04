@@ -14,3 +14,16 @@ jobs:
         working-directory: app
       - run: npm run demo:calendar
         working-directory: app
+  harness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --ignore-scripts
+        working-directory: harness
+      - run: npm test
+        working-directory: harness
+      - run: npm run demo
+        working-directory: harness
