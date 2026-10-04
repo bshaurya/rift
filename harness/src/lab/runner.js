@@ -43,26 +43,40 @@ async function naiveRetry(calendar, action) {
   }
 }
 
-async function riftClient(directory, calendar, action) {
-  const operations = new Operations(path.join(directory, 'client'), calendar);
-  try {
-    const proposal = await operations.propose(action);
-    let result = await operations.approve(proposal.id, proposal.digest);
-    if (result.status === 'uncertain') result = await operations.reconcile(result.id);
-    return { status: result.status, reason: result.reason, eventId: result.eventId };
-  } finally { operations.close(); }
+async function riftClient(operations, action) {
+  const proposal = await operations.propose(action);
+  let result = await operations.approve(proposal.id, proposal.digest);
+  if (result.status === 'uncertain') result = await operations.reconcile(result.id);
+  return { status: result.status, reason: result.reason, eventId: result.eventId };
 }
 
 export async function runClient(directory, scenario, clientName) {
   if (!['rift', 'naive-retry'].includes(clientName)) throw new Error('Clients: rift or naive-retry.');
   initializeRun(directory, scenario, { kind: 'scripted-action-client', label: clientName });
   const calendar = new ScenarioCalendar(directory);
+  let operations;
   try {
-    const result = clientName === 'rift'
-      ? await riftClient(directory, calendar, scenario.task.event)
-      : await naiveRetry(calendar, scenario.task.event);
+    if (clientName === 'rift') operations = new Operations(path.join(directory, 'client'), calendar);
+    let result;
+    try {
+      result = clientName === 'rift'
+        ? await riftClient(operations, scenario.task.event)
+        : await naiveRetry(calendar, scenario.task.event);
+    } catch (error) {
+      // Database failures invalidate the run; client failures still have evidence to grade.
+      if (error?.code === 'LAB_TRANSACTION' || String(error?.code).startsWith('ERR_SQLITE')) throw error;
+      result = {
+        status: 'error',
+        error: {
+          code: ['string', 'number'].includes(typeof error?.code) ? error.code : 'CLIENT_ERROR',
+          message: error?.publicMessage || 'Scripted client execution failed.'
+        }
+      };
+    }
     fs.writeFileSync(path.join(directory, 'client-result.json'), `${JSON.stringify(result, null, 2)}\n`, { mode: 0o600 });
-  } finally { calendar.close(); }
+  } finally {
+    try { operations?.close(); } finally { calendar.close(); }
+  }
   return checkRun(directory);
 }
 

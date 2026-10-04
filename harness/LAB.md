@@ -14,7 +14,7 @@ npm test
 npm run demo:lab
 ```
 
-The demo prints its report directory under `.lab-runs/`. Each run contains `report.json`, `client-result.json`, and its database. The comparison uses two scripted clients:
+The demo prints its report directory under `.lab-runs/`. Each run contains `report.json`, `client-result.json`, and its database. Client exceptions are recorded in `client-result.json`, and the evaluator still writes a report and determines the exit status from the checks. Configuration, database, and artifact-writing failures remain runtime errors with exit status `2`. The comparison uses two scripted clients:
 
 - `naive-retry` checks availability once, then retries an uncertain creation with a new event ID.
 - `rift` calls the existing `Operations` implementation: propose, execute after simulated approval, and reconcile an uncertain outcome by ID. This test driver does not exercise a human approval interaction.

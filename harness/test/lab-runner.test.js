@@ -65,6 +65,46 @@ test('a scripted client cannot silently reset a used run', async t => {
   await assert.rejects(runClient(directory, scenario, 'naive-retry'));
   assert.deepEqual(checkRun(directory), first);
 });
+test('client read rejections retain results and an automatically evaluated report', async t => {
+  const parent = temporary(t), scenario = loadScenario('clean-create');
+  scenario.faults = [{ method: 'events', invocation: 1, effect: 'reject_auth' }];
+  scenario.expected.targetCount = 0;
+  for (const client of ['rift', 'naive-retry']) {
+    const directory = path.join(parent, client);
+    const report = await runClient(directory, scenario, client);
+    assert.equal(report.outcome, 'passed');
+    assert.equal(report.trace[0].error.code, 401);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(directory, 'report.json'))), report);
+    const result = JSON.parse(fs.readFileSync(path.join(directory, 'client-result.json')));
+    assert.equal(result.status, 'error'); assert.equal(result.error.code, 401);
+  }
+});
+test('failed reconciliation records the client error and returns failed checks through the CLI', t => {
+  const parent = temporary(t), scenario = loadScenario('commit-timeout');
+  scenario.faults.push({ method: 'find', invocation: 1, effect: 'reject_auth' });
+  const scenarioFile = path.join(parent, 'scenario.json');
+  fs.writeFileSync(scenarioFile, JSON.stringify(scenario));
+  const directory = path.join(parent, 'run');
+  const result = spawnSync(process.execPath, [cli, 'run', '--scenario', scenarioFile, '--client', 'rift', '--out', directory], { encoding: 'utf8', timeout: 15000 });
+  assert.equal(result.status, 1, result.stderr);
+  const report = JSON.parse(result.stdout);
+  assert.equal(report.outcome, 'failed');
+  assert.equal(report.trace.filter(entry => entry.method === 'create').length, 1);
+  assert.equal(report.checks.find(check => check.name === 'uncertainty_diagnosed').passed, false);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(directory, 'report.json'))), report);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(directory, 'client-result.json'))).error.code, 401);
+});
+test('client infrastructure and report-writing failures remain runtime errors', async t => {
+  const parent = temporary(t), scenario = loadScenario('clean-create');
+  const badClient = path.join(parent, 'bad-client'); fs.mkdirSync(badClient);
+  fs.writeFileSync(path.join(badClient, 'client'), 'not a directory');
+  await assert.rejects(runClient(badClient, scenario, 'rift'), error => error.code === 'EEXIST' || error.code === 'ENOTDIR');
+  assert.equal(fs.existsSync(path.join(badClient, 'client-result.json')), false);
+  const badReport = path.join(parent, 'bad-report');
+  fs.mkdirSync(path.join(badReport, 'report.json'), { recursive: true });
+  await assert.rejects(runClient(badReport, scenario, 'rift'), error => error.code === 'EISDIR');
+  assert.equal(JSON.parse(fs.readFileSync(path.join(badReport, 'client-result.json'))).status, 'succeeded');
+});
 
 test('lucky final state cannot pass until the client diagnoses an uncertain write', async t => {
   const parent = temporary(t);
