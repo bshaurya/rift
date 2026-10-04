@@ -1,6 +1,12 @@
 # Recorded Host Evaluations
 
-Actual Codex and Claude Code CLI sessions used the same six offline task definitions and resource evaluator. Each host had one fresh session and calendar per scenario. These are smoke tests, not model reliability estimates or a controlled ranking.
+Actual Codex and Claude Code CLI sessions used the same six offline task definitions and resource evaluator. [The repeated evaluation](repeated-2026-10-04/README.md) retains three fresh samples per scenario in each host: 36 samples total, with 15 passed and three failed per host, no runtime errors, and no excluded or unattempted samples. Both hosts failed the concurrent-change task in every sample. These fixed tasks do not establish general reliability or a controlled model ranking.
+
+The lab can render the retained JSON evidence as a standalone HTML report without calling a model. Scenario links jump to failures, which expose calendar state and provider calls. A [timed fresh-checkout demo](repeated-2026-10-04/reviewer-first-run.json) generated a report in 5.542 seconds on macOS using an existing npm cache.
+
+## Initial Smoke Tests
+
+The initial smoke tests below used one fresh session and calendar per scenario. Their original artifacts are retained separately from the repeated evaluation.
 
 | Scenario | Codex: GPT-5.5 | Claude: Opus 5.5 |
 | --- | --- | --- |

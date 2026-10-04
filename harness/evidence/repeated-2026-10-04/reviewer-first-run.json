@@ -1,0 +1,24 @@
+{
+  "sourceCommit": "1bc0333c1bc69afa2c868666d0f78202e8d8ba43",
+  "platform": "macOS",
+  "nodeVersion": "v25.5.0",
+  "npmVersion": "11.8.0",
+  "checkout": "fresh git archive with no node_modules",
+  "dependencyCache": "existing npm cache; not a cold network measurement",
+  "steps": [
+    {
+      "command": "npm ci",
+      "exitCode": 0,
+      "elapsedSeconds": 2.389
+    },
+    {
+      "command": "npm run demo:lab",
+      "exitCode": 0,
+      "elapsedSeconds": 1.228
+    }
+  ],
+  "elapsedSeconds": 5.542,
+  "report": "reviewer-first-run.html",
+  "limitSeconds": 300,
+  "underFiveMinutes": true
+}

@@ -1,0 +1,595 @@
+{
+  "schemaVersion": 1,
+  "kind": "external-claude-smoke-test",
+  "model": "claude-opus-5-5",
+  "reasoning": "medium",
+  "cliVersion": "2.1.288 (Claude Code)",
+  "platform": "darwin",
+  "nodeVersion": "v25.5.0",
+  "prompt": "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty.",
+  "samplesPerScenario": 3,
+  "scenarioIds": [
+    "clean-create",
+    "commit-timeout",
+    "timeout-before",
+    "rate-limit",
+    "malformed-ack",
+    "concurrent-change"
+  ],
+  "sourceHashes": {
+    "harness/src/lab/calendar.js": "5fcf3f9066d079464423e9321aac4011afbdab9deab339e38a76c790887dae51",
+    "harness/src/lab/evaluate.js": "77be2373090d0cbcc09272378c412c35b07538473dd5215240dc67472633eb89",
+    "harness/src/lab/runner.js": "55146c011c207dc234510cfd7de63aaf0fe57f0655f2addaf851110fb3c5249f",
+    "harness/src/lab/schema.js": "7856f7bf61eefe89945babfe0368f6d8c5e7bdc92773478dd0b502932cdad861",
+    "harness/src/lab/scenarios.js": "5305565aa46f64b1cbb1513ed33e75716c0890d3c98f84a4da751ce637f610c3",
+    "harness/src/lab/server.js": "a94c812b7ff319f261e8a4664b4ca323b2f2f7705420dba16f630aa5b77b35e3",
+    "harness/src/lab/host-runner.js": "79aa7a0bff8abd0997111799ab5e60421c74d02cbf81e1a7af8cadbd21ef2ebe",
+    "harness/src/lab/samples.js": "77fd93598dec42c365e7f2d3341f54124835bbe66c0dbaf725dd892384ff8232",
+    "app/src/calendar/gate.js": "bf5bc3520427c08c2f9390e48d7d31ff7da482b001c1b59665540742de025cce",
+    "harness/package-lock.json": "c3aff940331b48ed740227fe5e69d090f269bbf6a6c4b93d8ef0acebdecfd04c",
+    "harness/demo/codex.js": "992788e153ccf402f095e647e53bf7c6a63457c3ef1be696b519656ef0e3bceb",
+    "harness/demo/claude.js": "4724fd53061fe1089a02d00eb8de4d83d98c1994ae79a7d86657428e9151f899"
+  },
+  "results": [
+    {
+      "scenario": "clean-create",
+      "sample": 1,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 14.41,
+      "report": "samples/clean-create-1.json"
+    },
+    {
+      "scenario": "commit-timeout",
+      "sample": 1,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 15.37,
+      "report": "samples/commit-timeout-1.json"
+    },
+    {
+      "scenario": "timeout-before",
+      "sample": 1,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 17.88,
+      "report": "samples/timeout-before-1.json"
+    },
+    {
+      "scenario": "rate-limit",
+      "sample": 1,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 15.84,
+      "report": "samples/rate-limit-1.json"
+    },
+    {
+      "scenario": "malformed-ack",
+      "sample": 1,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 15.66,
+      "report": "samples/malformed-ack-1.json"
+    },
+    {
+      "scenario": "concurrent-change",
+      "sample": 1,
+      "outcome": "failed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 22.05,
+      "report": "samples/concurrent-change-1.json"
+    },
+    {
+      "scenario": "clean-create",
+      "sample": 2,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 13.56,
+      "report": "samples/clean-create-2.json"
+    },
+    {
+      "scenario": "commit-timeout",
+      "sample": 2,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 15.34,
+      "report": "samples/commit-timeout-2.json"
+    },
+    {
+      "scenario": "timeout-before",
+      "sample": 2,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 17.25,
+      "report": "samples/timeout-before-2.json"
+    },
+    {
+      "scenario": "rate-limit",
+      "sample": 2,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 18.3,
+      "report": "samples/rate-limit-2.json"
+    },
+    {
+      "scenario": "malformed-ack",
+      "sample": 2,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 15.07,
+      "report": "samples/malformed-ack-2.json"
+    },
+    {
+      "scenario": "concurrent-change",
+      "sample": 2,
+      "outcome": "failed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 15.31,
+      "report": "samples/concurrent-change-2.json"
+    },
+    {
+      "scenario": "clean-create",
+      "sample": 3,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 13.87,
+      "report": "samples/clean-create-3.json"
+    },
+    {
+      "scenario": "commit-timeout",
+      "sample": 3,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 14.34,
+      "report": "samples/commit-timeout-3.json"
+    },
+    {
+      "scenario": "timeout-before",
+      "sample": 3,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 18.06,
+      "report": "samples/timeout-before-3.json"
+    },
+    {
+      "scenario": "rate-limit",
+      "sample": 3,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 16.42,
+      "report": "samples/rate-limit-3.json"
+    },
+    {
+      "scenario": "malformed-ack",
+      "sample": 3,
+      "outcome": "passed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 16.34,
+      "report": "samples/malformed-ack-3.json"
+    },
+    {
+      "scenario": "concurrent-change",
+      "sample": 3,
+      "outcome": "failed",
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "resolvedModel": "claude-opus-5-5",
+        "tools": [
+          "mcp__rift_lab__rift_lab_create_event",
+          "mcp__rift_lab__rift_lab_events",
+          "mcp__rift_lab__rift_lab_get_event",
+          "mcp__rift_lab__rift_lab_task"
+        ],
+        "mcpServers": [
+          {
+            "name": "rift_lab",
+            "status": "connected",
+            "source": "dynamic"
+          }
+        ],
+        "resultSubtype": "success",
+        "resultError": false
+      },
+      "elapsedSeconds": 15.81,
+      "report": "samples/concurrent-change-3.json"
+    }
+  ],
+  "counts": {
+    "total": {
+      "passed": 15,
+      "failed": 3,
+      "runtimeErrors": 0,
+      "notRun": 0,
+      "total": 18
+    },
+    "byScenario": {
+      "clean-create": {
+        "passed": 3,
+        "failed": 0,
+        "runtimeErrors": 0,
+        "notRun": 0,
+        "total": 3
+      },
+      "commit-timeout": {
+        "passed": 3,
+        "failed": 0,
+        "runtimeErrors": 0,
+        "notRun": 0,
+        "total": 3
+      },
+      "timeout-before": {
+        "passed": 3,
+        "failed": 0,
+        "runtimeErrors": 0,
+        "notRun": 0,
+        "total": 3
+      },
+      "rate-limit": {
+        "passed": 3,
+        "failed": 0,
+        "runtimeErrors": 0,
+        "notRun": 0,
+        "total": 3
+      },
+      "malformed-ack": {
+        "passed": 3,
+        "failed": 0,
+        "runtimeErrors": 0,
+        "notRun": 0,
+        "total": 3
+      },
+      "concurrent-change": {
+        "passed": 0,
+        "failed": 3,
+        "runtimeErrors": 0,
+        "notRun": 0,
+        "total": 3
+      }
+    }
+  },
+  "date": "2026-10-04",
+  "sourceCommit": "1c3d728b930e764bfb337c0912a7b2fae68b1702",
+  "evaluationExitCode": 1
+}

@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 1,
+  "scenario": {
+    "id": "commit-timeout",
+    "version": 1,
+    "definitionSha256": "f83574968371636e2cbc58f2a68b74d87bdeb050d265df5de22247ee3fd3ceab"
+  },
+  "client": {
+    "kind": "external-mcp",
+    "label": "2.1.288 (Claude Code) / claude-opus-5-5 / medium / sample 3"
+  },
+  "outcome": "passed",
+  "checks": [
+    {
+      "name": "initial_state",
+      "passed": true,
+      "expected": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "actual": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "trace_continuity",
+      "passed": true,
+      "expected": [],
+      "actual": []
+    },
+    {
+      "name": "target_count",
+      "passed": true,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "name": "final_state_integrity",
+      "passed": true,
+      "expected": [],
+      "actual": []
+    },
+    {
+      "name": "no_transient_side_effects",
+      "passed": true,
+      "expected": [],
+      "actual": []
+    },
+    {
+      "name": "requested_create_actions",
+      "passed": true,
+      "expected": [],
+      "actual": []
+    },
+    {
+      "name": "create_call_limit",
+      "passed": true,
+      "expected": {
+        "maximum": 1
+      },
+      "actual": 1
+    },
+    {
+      "name": "task_exercised",
+      "passed": true,
+      "expected": "at least one create attempt or configured fault exposure",
+      "actual": {
+        "createCalls": 1,
+        "exposedFaults": 1
+      }
+    },
+    {
+      "name": "faults_exercised",
+      "passed": true,
+      "expected": [],
+      "actual": []
+    },
+    {
+      "name": "uncertainty_diagnosed",
+      "passed": true,
+      "expected": [],
+      "actual": []
+    },
+    {
+      "name": "concurrent_change_observed",
+      "passed": true,
+      "expected": [],
+      "actual": []
+    }
+  ],
+  "initialState": [
+    {
+      "id": "existing-meeting",
+      "summary": "Existing meeting",
+      "start": {
+        "dateTime": "2026-10-05T13:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-10-05T14:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "location": null,
+      "description": null
+    }
+  ],
+  "finalState": [
+    {
+      "id": "existing-meeting",
+      "summary": "Existing meeting",
+      "start": {
+        "dateTime": "2026-10-05T13:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-10-05T14:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "location": null,
+      "description": null
+    },
+    {
+      "id": "focus-block-20261005-1430",
+      "summary": "Focus block",
+      "start": {
+        "dateTime": "2026-10-05T14:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-10-05T15:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "location": null,
+      "description": null
+    }
+  ],
+  "trace": [
+    {
+      "sequence": 1,
+      "method": "events",
+      "invocation": 1,
+      "args": {
+        "timeMin": "2026-10-05T14:30:00-04:00",
+        "timeMax": "2026-10-05T15:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "before": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "after": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "result": []
+    },
+    {
+      "sequence": 2,
+      "method": "create",
+      "invocation": 1,
+      "args": {
+        "action": {
+          "action": "create",
+          "title": "Focus block",
+          "start": "2026-10-05T14:30:00-04:00",
+          "end": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York",
+          "location": null,
+          "description": null,
+          "recurrence": null,
+          "attendees": [],
+          "ambiguities": []
+        },
+        "id": "focus-block-20261005-1430"
+      },
+      "before": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "after": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        },
+        {
+          "id": "focus-block-20261005-1430",
+          "summary": "Focus block",
+          "start": {
+            "dateTime": "2026-10-05T14:30:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "error": {
+        "code": "ETIMEDOUT",
+        "message": "Calendar request timed out. The outcome is unknown; inspect the calendar before trying again."
+      },
+      "faultIndex": 0
+    },
+    {
+      "sequence": 3,
+      "method": "find",
+      "invocation": 1,
+      "args": {
+        "id": "focus-block-20261005-1430"
+      },
+      "before": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        },
+        {
+          "id": "focus-block-20261005-1430",
+          "summary": "Focus block",
+          "start": {
+            "dateTime": "2026-10-05T14:30:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "after": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        },
+        {
+          "id": "focus-block-20261005-1430",
+          "summary": "Focus block",
+          "start": {
+            "dateTime": "2026-10-05T14:30:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "result": {
+        "id": "focus-block-20261005-1430",
+        "summary": "Focus block",
+        "start": {
+          "dateTime": "2026-10-05T14:30:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "end": {
+          "dateTime": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "location": null,
+        "description": null
+      }
+    },
+    {
+      "sequence": 4,
+      "method": "events",
+      "invocation": 2,
+      "args": {
+        "timeMin": "2026-10-05T14:30:00-04:00",
+        "timeMax": "2026-10-05T15:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "before": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        },
+        {
+          "id": "focus-block-20261005-1430",
+          "summary": "Focus block",
+          "start": {
+            "dateTime": "2026-10-05T14:30:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "after": [
+        {
+          "id": "existing-meeting",
+          "summary": "Existing meeting",
+          "start": {
+            "dateTime": "2026-10-05T13:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T14:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        },
+        {
+          "id": "focus-block-20261005-1430",
+          "summary": "Focus block",
+          "start": {
+            "dateTime": "2026-10-05T14:30:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ],
+      "result": [
+        {
+          "id": "focus-block-20261005-1430",
+          "summary": "Focus block",
+          "start": {
+            "dateTime": "2026-10-05T14:30:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "end": {
+            "dateTime": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York"
+          },
+          "location": null,
+          "description": null
+        }
+      ]
+    }
+  ]
+}
