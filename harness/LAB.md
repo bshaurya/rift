@@ -19,7 +19,7 @@ The demo prints its report directory under `.lab-runs/`. Each run contains `repo
 - `naive-retry` checks availability once, then retries an uncertain creation with a new event ID.
 - `rift` calls the existing `Operations` implementation: propose, execute after simulated approval, and reconcile an uncertain outcome by ID. This test driver does not exercise a human approval interaction.
 
-These are action-client tests. Neither comparison driver calls a language model. An [actual Codex CLI smoke test](evidence/codex-2026-10-04/README.md) and its retained failure are separate evidence. There are no general model reliability estimates, external users, or live-provider conformance claims.
+These are action-client tests. Neither comparison driver calls a language model. [Actual Codex and Claude CLI smoke tests](evidence/README.md) and their retained failures are separate evidence. There are no general model reliability estimates, external users, or live-provider conformance claims.
 
 | Scenario | Simulated condition | Expected behavior |
 | --- | --- | --- |
@@ -98,7 +98,7 @@ npm run lab -- check --run .lab-runs/manual
 
 Checking reads a consistent snapshot, writes `report.json`, and returns `0` for passing checks or `1` for failed checks. Configuration, missing-run, and runtime errors exit `2`. Reconnecting the host resumes the same calendar and fault counters; initialize a new directory for another attempt. An untouched run cannot pass.
 
-MCP transport is tested with the official SDK. The recorded Codex runs use the optional non-interactive runner above; manual interactive Codex and Claude sessions remain a separate validation step. For meaningful model comparisons, retain configuration, repeat each scenario in fresh runs, and report individual failures and sample counts. Manual MCP setup does not launch or sandbox a model process.
+MCP transport is tested with the official SDK. The recorded Codex and Claude runs use the optional non-interactive runners above; manual interactive sessions remain a separate validation step. For meaningful model comparisons, retain configuration, repeat each scenario in fresh runs, and report individual failures and sample counts. Manual MCP setup does not launch or sandbox a model process.
 
 ## Scenario and Provider Contract
 
