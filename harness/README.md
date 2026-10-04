@@ -35,7 +35,7 @@ These commands follow the official [Codex MCP configuration](https://developers.
 node /absolute/path/rift/harness/src/cli.js auth --client /absolute/path/desktop-client.json --data /absolute/path/rift-google-state
 ```
 
-Open the printed Google URL in your browser, sign in, and grant the requested calendar read/event permissions. The callback binds only to `127.0.0.1` on a random port, verifies state, and exchanges a S256 PKCE verifier. This follows [Google's desktop OAuth guidance](https://developers.google.com/identity/protocols/oauth2/native-app). Credentials are written to a private file in the state directory. Rift rejects credential directories inside a Git checkout and binds the operation database to the authenticated primary calendar.
+Open the printed Google URL in your browser, sign in, and grant the requested calendar read/event permissions. The callback binds only to `127.0.0.1` on a random port, verifies state, and exchanges a S256 PKCE verifier. This follows [Google's desktop OAuth guidance](https://developers.google.com/identity/protocols/oauth2/native-app). Credentials are written to a private file in the state directory. Rift checks both logical and physical path ancestry, resolves symlinks and existing ancestors of missing directories, rejects dangling aliases, and rejects credential directories inside a Git checkout and binds the operation database to the authenticated primary calendar.
 
 Register the live provider with the same state directory in both hosts:
 

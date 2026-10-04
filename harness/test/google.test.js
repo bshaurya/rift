@@ -47,6 +47,40 @@ test('credential writes are private; repository directories are rejected', () =>
     fs.mkdirSync(path.join(directory, '.git')); assert.throws(() => assertCredentialDirectory(path.join(directory, 'nested')), /outside a Git/);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 });
+test('credential guards resolve aliases and missing descendants before writing', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rift-auth-alias-'));
+  try {
+    const checkout = path.join(root, 'checkout'), state = path.join(checkout, 'state');
+    fs.mkdirSync(state, { recursive: true });
+    fs.writeFileSync(path.join(checkout, '.git'), 'gitdir: fixture');
+    const unsafe = path.join(root, 'unsafe-alias');
+    fs.symlinkSync(state, unsafe, process.platform === 'win32' ? 'junction' : 'dir');
+    for (const directory of [unsafe, path.join(unsafe, 'missing', 'nested')]) {
+      assert.throws(() => assertCredentialDirectory(directory), /outside a Git/);
+      assert.throws(() => privateWrite(path.join(directory, 'google-credentials.json'), { fixture: true }), /outside a Git/);
+    }
+    assert.equal(fs.existsSync(path.join(state, 'google-credentials.json')), false);
+    assert.equal(fs.existsSync(path.join(state, 'missing')), false);
+    const external = path.join(root, 'external'); fs.mkdirSync(external);
+    const safe = path.join(root, 'safe-alias');
+    fs.symlinkSync(external, safe, process.platform === 'win32' ? 'junction' : 'dir');
+    const filename = path.join(safe, 'new', 'google-credentials.json');
+    assertCredentialDirectory(path.dirname(filename));
+    privateWrite(filename, { fixture: true });
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(external, 'new', 'google-credentials.json'))), { fixture: true });
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+test('dangling credential aliases fail closed without creating their destination', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rift-auth-dangling-'));
+  try {
+    const checkout = path.join(root, 'checkout'); fs.mkdirSync(path.join(checkout, '.git'), { recursive: true });
+    const missing = path.join(checkout, 'missing'), alias = path.join(root, 'alias');
+    fs.symlinkSync(missing, alias, process.platform === 'win32' ? 'junction' : 'dir');
+    assert.throws(() => assertCredentialDirectory(path.join(alias, 'new')));
+    assert.throws(() => privateWrite(path.join(alias, 'new', 'google-credentials.json'), { fixture: true }));
+    assert.equal(fs.existsSync(missing), false);
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
 function fakeHttp() {
   let handler;
   return { get handler() { return handler; }, createServer(fn) { handler = fn; return { listen() {}, address: () => ({ port: 12345 }), once(name, cb) { if (name === 'listening') queueMicrotask(cb); return this; }, on() {}, removeListener() {}, close() {}, closeAllConnections() {} }; } };

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { OAuth2Client } from 'google-auth-library';
 export function privateWrite(filename, value) {
+  assertCredentialDirectory(path.dirname(filename));
   const temporary = `${filename}.${randomUUID()}.tmp`;
   fs.mkdirSync(path.dirname(filename), { recursive: true, mode: 0o700 });
   const fd = fs.openSync(temporary, 'wx', 0o600);
@@ -11,10 +12,24 @@ export function privateWrite(filename, value) {
   fs.renameSync(temporary, filename);
 }
 export function assertCredentialDirectory(directory) {
-  let current = path.resolve(directory);
+  const requested = path.resolve(directory);
+  let ancestor = requested;
+  // Find the nearest existing ancestor without treating dangling links as missing.
   while (true) {
-    if (fs.existsSync(path.join(current, '.git'))) throw new Error('Credentials must be stored outside a Git checkout.');
-    const parent = path.dirname(current); if (parent === current) break; current = parent;
+    try { fs.lstatSync(ancestor); break; }
+    catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      const parent = path.dirname(ancestor);
+      if (parent === ancestor) throw error;
+      ancestor = parent;
+    }
+  }
+  const physical = fs.realpathSync(ancestor);
+  for (let current of new Set([requested, physical])) {
+    while (true) {
+      if (fs.existsSync(path.join(current, '.git'))) throw new Error('Credentials must be stored outside a Git checkout.');
+      const parent = path.dirname(current); if (parent === current) break; current = parent;
+    }
   }
 }
 export class GoogleCalendar {
