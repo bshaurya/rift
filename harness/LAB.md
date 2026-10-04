@@ -41,6 +41,22 @@ npm run lab -- run --scenario commit-timeout --client rift --out .lab-runs/corre
 
 The first command should exit `1`: its checks detect two Focus block events. The corrected client should exit `0`. The complete demo exits `0` only when the expected failures are detected and all corrected runs pass. GitHub Actions retains the JSON reports as an artifact.
 
+## Evaluate Codex CLI
+
+With an installed, authenticated Codex CLI, run all six scenarios once each:
+
+```sh
+npm run eval:codex -- --model YOUR_SUPPORTED_MODEL --out .lab-runs/codex-smoke
+```
+
+Choose a model available to your CLI and account. The runner requires a fresh output directory, starts each case with separate state, and records the exact invocation, host JSONL, stderr, source hashes, and evaluator reports. `--reasoning` defaults to `medium`; `--timeout-ms` defaults to `180000` per case. `--codex` can select a different executable. This optional runner supports macOS and Linux.
+
+Each invocation ignores user configuration and disables shell tools, apps, plugins, other agents, and web search. It enables only the offline lab MCP server with automatic approval for its synthetic operations, without changing global MCP configuration. Model inference still uses the CLI's account and network connection. The evaluator grades calendar state and calls after the host exits. A host startup error or timeout returns `2` and stops the suite; failed task checks return `1`; all six passing cases return `0`. Timeout terminates the host process group before inspecting the run.
+
+One sample per scenario is a smoke test. Keep failures, account for incomplete runs, and use repeated independent samples before estimating model reliability. CLI exit success alone is insufficient. The runner's local files remain developer-controlled artifacts, and these settings do not establish isolation against a hostile client.
+
+Configuration uses [Codex MCP settings](https://learn.chatgpt.com/docs/extend/mcp?surface=cli), [CLI configuration overrides](https://learn.chatgpt.com/docs/config-file/config-reference), and [non-interactive execution](https://learn.chatgpt.com/docs/non-interactive-mode). CLI option availability depends on the installed version.
+
 ## Connect an Agent
 
 Initialize a fresh run and identify the host, model, and relevant configuration in its label:
