@@ -420,7 +420,7 @@ function showCalendarProposal(proposal) {
   const details = document.createElement('pre');
   details.style.whiteSpace = 'pre-wrap';
   const event = proposal.action;
-  details.textContent = `Operation: ${proposal.operationId}\nStatus: ${proposal.status}\nCalendar: primary\n${event.title}\nStart: ${event.start}\nEnd: ${event.end}\nTimezone: ${event.timeZone}\nLocation: ${event.location || '(none)'}\nDescription: ${event.description || '(none)'}${proposal.reason ? '\n' + proposal.reason : ''}`;
+  details.textContent = `Operation: ${proposal.operationId}\nStatus: ${proposal.status}\nCalendar: ${proposal.destination || '(unavailable; make a new proposal)'}\n${event.title}\nStart: ${event.start}\nEnd: ${event.end}\nTimezone: ${event.timeZone}\nLocation: ${event.location || '(none)'}\nDescription: ${event.description || '(none)'}${proposal.reason ? '\n' + proposal.reason : ''}`;
   responseDiv.append(details);
   showStatus(proposal.status === 'proposed' ? 'Review before adding to Google Calendar' : `Calendar operation: ${proposal.status}`);
   if (proposal.status === 'proposed') {

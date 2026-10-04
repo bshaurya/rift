@@ -17,13 +17,13 @@ For the desktop app, use `npm ci`, configure the variables listed in the root RE
 
 > Create event Rift Review on October 5, 2026, from 2pm to 2:30pm in America/New_York.
 
-The parser requires a supported `GEMINI_MODEL` chosen for the configured account. Review every field, then use Confirm or Cancel. Calendar authentication is checked during confirmation. Use the existing calendar sign-in control if authentication fails, then make a new proposal.
+The parser requires a supported `GEMINI_MODEL` chosen for the configured account. Calendar authentication and the concrete primary calendar ID are checked while proposing. Review the destination and every event field, then use Confirm or Cancel. Confirmation checks the current account again and rejects a changed destination before insertion. Use the existing calendar sign-in control if authentication fails, then make a new proposal.
 
 ## Proposal and Outcomes
 
 Model output must be a plain JSON object with exactly `action`, `title`, `start`, `end`, `timeZone`, `location`, `description`, `recurrence`, `attendees`, and `ambiguities`. The only action is `create`. Recurrence must be null, attendees and ambiguities must be empty arrays, and missing optional text fields must be null. Required dates include seconds and explicit offsets. The named IANA timezone must agree with both timestamps, including daylight saving time. End must follow start. Invalid dates, wrapped JSON, extra fields, unsupported writes, and missing information are rejected.
 
-Each proposal has a UUID operation ID, an action fingerprint, and a ten-minute review window. Confirm and Cancel send only that ID and fingerprint; the main process executes its stored validated action. Copies returned to the renderer cannot edit that action. Model text in the review uses DOM text content.
+Each proposal has a UUID operation ID, a fingerprint covering its action and concrete calendar destination, and a ten-minute review window. Confirm and Cancel send only that ID and fingerprint; the main process executes its stored validated action into that calendar ID. Copies returned to the renderer cannot edit the action or destination. Model text in the review uses DOM text content.
 
 The journal at Electron's user-data `calendar-operations.json` records event details and outcomes, with restricted file permissions and atomic replacement. It contains personal calendar data and should not be shared. A failed journal load or write blocks execution. Only one Electron application instance can own the journal.
 
@@ -37,7 +37,7 @@ The journal at Electron's user-data `calendar-operations.json` records event det
 | failed | Authentication failed before insertion or the provider explicitly rejected the write |
 | uncertain | Timeout, interrupted execution, connection failure, or unclassified provider failure; the event may exist |
 
-Repeated and concurrent confirmations of one operation issue at most one adapter call. Google insertion uses the operation ID as the event ID and disables transport retries. No terminal operation is automatically retried. A timeout can occur while the provider continues processing. Inspect the primary calendar before creating another proposal; the application does not yet reconcile uncertain results through provider reads. On restart, pending reviews become stale and interrupted execution becomes uncertain. The renderer displays the latest stale or uncertain record; `calendarOutcomes` exposes the complete journal through the preload API.
+Repeated and concurrent confirmations of one operation issue at most one adapter call. Google insertion uses the operation ID as the event ID and disables transport retries. Success requires an acknowledgement with the exact requested event ID; missing or mismatched IDs remain uncertain. No terminal operation is automatically retried. A timeout can occur while the provider continues processing. Inspect the primary calendar before creating another proposal; the application does not yet reconcile uncertain results through provider reads. On restart, pending reviews become stale and interrupted execution becomes uncertain. The renderer displays the latest stale or uncertain record; `calendarOutcomes` exposes the complete journal through the preload API.
 
 ## Write Boundaries
 

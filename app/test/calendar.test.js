@@ -46,6 +46,35 @@ test('concurrent and repeated confirmation issue one write', async () => {
   assert.equal((await gate.confirm(p.operationId, p.digest)).status, 'succeeded');
   assert.equal(calendar.calls.length, 1);
 });
+test('missing, invalid and unrelated acknowledgements remain uncertain without retry', async () => {
+  for (const result of [{}, { id: '' }, { id: ' ' }, { id: 42 }, { id: 'unrelated' }]) {
+    const { gate, calendar } = setup();
+    calendar.create = async () => { calendar.calls.push('attempt'); return result; };
+    const proposal = await gate.propose('Request');
+    const outcome = await gate.confirm(proposal.operationId, proposal.digest);
+    assert.equal(outcome.status, 'uncertain', JSON.stringify(result));
+    assert.equal(outcome.eventId, undefined);
+    await gate.confirm(proposal.operationId, proposal.digest);
+    assert.equal(calendar.calls.length, 1);
+  }
+});
+test('review fingerprint includes the destination and unavailable identities cannot be proposed', async () => {
+  const { gate, calendar, store } = setup();
+  const proposal = await gate.propose('Request');
+  assert.equal(proposal.destination, 'fake:primary');
+  proposal.destination = 'unreviewed';
+  await gate.confirm(proposal.operationId, proposal.digest);
+  assert.equal(gate.get(proposal.operationId).destination, 'fake:primary');
+  const second = await gate.propose('Request');
+  gate.records[second.operationId].destination = 'changed';
+  await assert.rejects(gate.confirm(second.operationId, second.digest), /altered/);
+  for (const identity of [undefined, '', ' ', 42]) {
+    calendar.destination = async () => identity;
+    const count = Object.keys(store.load()).length;
+    await assert.rejects(gate.propose('Request'), /destination/);
+    assert.equal(Object.keys(store.load()).length, count);
+  }
+});
 for (const [code, status, reason] of [[400, 'failed', 'provider-rejected'], [401, 'failed', 'auth'], [403, 'failed', 'auth'], [429, 'failed', 'rate-limit'], [500, 'uncertain'], ['ECONNRESET', 'uncertain']]) {
   test(`provider ${code} records ${status} without retry`, async () => {
     const { gate, calendar } = setup(); calendar.error = Object.assign(new Error('secret-bearing details'), { code });

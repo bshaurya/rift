@@ -5,7 +5,8 @@ const sample = {
 };
 const fakeModel = async () => JSON.stringify(sample);
 class FakeCalendar {
-  constructor() { this.calls = []; this.error = null; this.delayMs = 0; }
+  constructor() { this.calls = []; this.error = null; this.delayMs = 0; this.identity = 'fake:primary'; }
+  async destination() { return this.identity; }
   async create(action, id) {
     this.calls.push({ action: structuredClone(action), id });
     if (this.delayMs) await new Promise(resolve => setTimeout(resolve, this.delayMs));

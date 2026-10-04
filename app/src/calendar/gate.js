@@ -55,8 +55,10 @@ class CalendarGate {
   async propose(request) {
     if (typeof request !== 'string' || !request.trim() || request.length > 4000) throw new Error('Provide a request up to 4000 characters.');
     const action = parseModel(await this.model(request));
+    const destination = await this.calendar.destination();
+    if (typeof destination !== 'string' || !destination.trim() || destination.length > 1024) throw new Error('A concrete calendar destination is required.');
     const operationId = randomUUID();
-    const record = { operationId, action, digest: fingerprint(action), status: 'proposed', expiresAt: this.now() + 10 * 60 * 1000 };
+    const record = { operationId, action, destination, digest: fingerprint({ action, destination }), status: 'proposed', expiresAt: this.now() + 10 * 60 * 1000 };
     this.records[operationId] = record;
     this.store.save(this.records);
     return structuredClone(record);
@@ -71,7 +73,7 @@ class CalendarGate {
   }
   checked(operationId, digest) {
     const record = this.records[operationId];
-    if (!record || record.digest !== digest || fingerprint(record.action) !== digest) throw new Error('Unknown or altered proposal.');
+    if (!record || record.digest !== digest || fingerprint({ action: record.action, destination: record.destination }) !== digest) throw new Error('Unknown or altered proposal.');
     validate(record.action);
     return record;
   }
@@ -87,16 +89,17 @@ class CalendarGate {
     let timer;
     try {
       const result = await Promise.race([
-        Promise.resolve().then(() => this.calendar.create(record.action, operationId)),
+        Promise.resolve().then(() => this.calendar.create(record.action, operationId, record.destination)),
         new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('timeout')), this.timeoutMs); })
       ]);
+      if (result?.id !== operationId.replaceAll('-', '')) throw new Error('Provider did not acknowledge the requested event ID.');
       record.status = 'succeeded';
       record.eventId = result.id;
     } catch (error) {
       const status = Number(error.response?.status || error.code);
       const known = error.beforeWrite === true || [400, 401, 403, 404, 422, 429].includes(status);
       record.status = known ? 'failed' : 'uncertain';
-      record.reason = status === 401 || status === 403 ? 'auth' : status === 429 ? 'rate-limit' : known ? 'provider-rejected' : 'Check the calendar before making another proposal; the event may exist.';
+      record.reason = error.destinationChanged ? 'destination-changed' : status === 401 || status === 403 ? 'auth' : status === 429 ? 'rate-limit' : known ? 'provider-rejected' : 'Check the calendar before making another proposal; the event may exist.';
     } finally { clearTimeout(timer); }
     this.store.save(this.records);
     return this.get(operationId);
