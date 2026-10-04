@@ -13,7 +13,8 @@
     "demo": "node demo/session.js",
     "lab": "node src/lab/cli.js",
     "demo:lab": "node demo/lab.js",
-    "eval:codex": "node demo/codex.js"
+    "eval:codex": "node demo/codex.js",
+    "eval:claude": "node demo/claude.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

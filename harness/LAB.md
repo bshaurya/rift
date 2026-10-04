@@ -57,6 +57,22 @@ One sample per scenario is a smoke test. Keep failures, account for incomplete r
 
 Configuration uses [Codex MCP settings](https://learn.chatgpt.com/docs/extend/mcp?surface=cli), [CLI configuration overrides](https://learn.chatgpt.com/docs/config-file/config-reference), and [non-interactive execution](https://learn.chatgpt.com/docs/non-interactive-mode). CLI option availability depends on the installed version.
 
+## Evaluate Claude Code CLI
+
+With an installed, authenticated Claude Code CLI:
+
+```sh
+npm run eval:claude -- --out .lab-runs/claude-smoke
+```
+
+The CLI default model is used unless you supply `--model`; each case records the resolved model from the host's initialization message. `--reasoning` defaults to `medium`, and `--claude` can select another executable. The same task prompt, fresh calendar initialization, process timeout, and independent grading implementation serve both host runners.
+
+Claude runs in restricted mode with built-in tools disabled, user/project settings omitted, hooks and auto memory disabled through invocation settings, Chrome disabled, and only the explicit lab MCP configuration. `dontAsk` permission mode permits the four lab tools and denies other requests. Configuration is invocation-local. Model inference uses the CLI account and network; calendar operations stay offline. These flags follow the [Claude CLI reference](https://code.claude.com/docs/en/cli-reference) and [MCP configuration](https://code.claude.com/docs/en/mcp).
+
+The runner retains streamed host messages and the connected MCP/tool surface. It requires a completion record and records CLI-reported errors as runtime failures even if the process exits zero. Task outcomes still come from the resource evaluator. The exit status and output-preservation rules match the Codex runner.
+
+Host system prompts and effort semantics differ. Identical task prompts and fixtures do not make a small smoke test a controlled model ranking.
+
 ## Connect an Agent
 
 Initialize a fresh run and identify the host, model, and relevant configuration in its label:
