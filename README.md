@@ -11,6 +11,8 @@ npm run demo:lab
 
 The demo compares a deliberately unsafe retry client with Rift's existing action client across six scenarios. It uses no model or Google account. Reports contain individual checks, initial and final events, and an ordered call trace; these scripted results are not measurements of Codex or Claude performance.
 
+A [recorded Codex CLI smoke test](harness/evidence/codex-2026-10-04/README.md) passed five scenarios and failed the stale-availability case, where the agent reported success after creating an overlapping event. The lab detected the incorrect state. The optional `npm run eval:codex` runner retains fresh host runs and reports; this is one sample per scenario, not a general model success rate.
+
 The [reviewed calendar harness](harness/README.md) also supports Google Calendar through local authentication and explicit terminal review. The Electron application in `app/` provides the desktop features below.
 
 ## Features

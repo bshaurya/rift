@@ -19,7 +19,7 @@ The demo prints its report directory under `.lab-runs/`. Each run contains `repo
 - `naive-retry` checks availability once, then retries an uncertain creation with a new event ID.
 - `rift` calls the existing `Operations` implementation: propose, execute after simulated approval, and reconcile an uncertain outcome by ID. This test driver does not exercise a human approval interaction.
 
-These are action-client tests. Neither driver calls a language model. There are no measured Codex or Claude pass rates, external users, or live-provider conformance claims.
+These are action-client tests. Neither comparison driver calls a language model. An [actual Codex CLI smoke test](evidence/codex-2026-10-04/README.md) and its retained failure are separate evidence. There are no general model reliability estimates, external users, or live-provider conformance claims.
 
 | Scenario | Simulated condition | Expected behavior |
 | --- | --- | --- |
@@ -40,6 +40,22 @@ npm run lab -- run --scenario commit-timeout --client rift --out .lab-runs/corre
 ```
 
 The first command should exit `1`: its checks detect two Focus block events. The corrected client should exit `0`. The complete demo exits `0` only when the expected failures are detected and all corrected runs pass. GitHub Actions retains the JSON reports as an artifact.
+
+## Evaluate Codex CLI
+
+With an installed, authenticated Codex CLI, run all six scenarios once each:
+
+```sh
+npm run eval:codex -- --model YOUR_SUPPORTED_MODEL --out .lab-runs/codex-smoke
+```
+
+Choose a model available to your CLI and account. The runner requires a fresh output directory, starts each case with separate state, and records the exact invocation, host JSONL, stderr, source hashes, and evaluator reports. `--reasoning` defaults to `medium`; `--timeout-ms` defaults to `180000` per case. `--codex` can select a different executable. This optional runner supports macOS and Linux.
+
+Each invocation ignores user configuration and disables shell tools, apps, plugins, other agents, and web search. It enables only the offline lab MCP server with automatic approval for its synthetic operations, without changing global MCP configuration. Model inference still uses the CLI's account and network connection. The evaluator grades calendar state and calls after the host exits. A host startup error or timeout returns `2` and stops the suite; failed task checks return `1`; all six passing cases return `0`. Timeout terminates the host process group before inspecting the run.
+
+One sample per scenario is a smoke test. Keep failures, account for incomplete runs, and use repeated independent samples before estimating model reliability. CLI exit success alone is insufficient. The runner's local files remain developer-controlled artifacts, and these settings do not establish isolation against a hostile client.
+
+Configuration uses [Codex MCP settings](https://learn.chatgpt.com/docs/extend/mcp?surface=cli), [CLI configuration overrides](https://learn.chatgpt.com/docs/config-file/config-reference), and [non-interactive execution](https://learn.chatgpt.com/docs/non-interactive-mode). CLI option availability depends on the installed version.
 
 ## Connect an Agent
 
@@ -66,7 +82,7 @@ npm run lab -- check --run .lab-runs/manual
 
 Checking reads a consistent snapshot, writes `report.json`, and returns `0` for passing checks or `1` for failed checks. Configuration, missing-run, and runtime errors exit `2`. Reconnecting the host resumes the same calendar and fault counters; initialize a new directory for another attempt. An untouched run cannot pass.
 
-MCP transport is tested with the official SDK. Interactive Codex and Claude runs remain a separate validation step. For meaningful model comparisons, retain configuration, repeat each scenario in fresh runs, and report individual failures and sample counts. The CLI does not launch or sandbox a model process.
+MCP transport is tested with the official SDK. The recorded Codex runs use the optional non-interactive runner above; manual interactive Codex and Claude sessions remain a separate validation step. For meaningful model comparisons, retain configuration, repeat each scenario in fresh runs, and report individual failures and sample counts. Manual MCP setup does not launch or sandbox a model process.
 
 ## Scenario and Provider Contract
 
