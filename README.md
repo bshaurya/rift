@@ -1,6 +1,6 @@
 # Rift
 
-Rift supplies reviewed calendar tools for Codex and Claude through a local MCP harness. Start with the [harness setup and demo](harness/README.md). The existing Electron assistant in `app/` also supports calendar queries and email tasks.
+Rift supplies shared calendar operations for Codex and Claude through a local MCP harness. It preserves proposals across agent sessions, requires local review before creation, and reconciles uncertain outcomes through provider reads. Start with the [harness setup and demo](harness/README.md). The existing Electron assistant in `app/` also supports calendar queries and email tasks.
 
 ## Features
 

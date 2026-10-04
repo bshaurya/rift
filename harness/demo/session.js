@@ -8,7 +8,7 @@ import { Operations } from '../src/operations.js';
 import { FakeCalendar } from '../src/fake.js';
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'rift-demo-'));
 const client = new Client({ name: 'demo-host', version: '1.0.0' });
-const transport = new StdioClientTransport({ command: process.execPath, args: [fileURLToPath(new URL('../src/cli.js', import.meta.url)), 'serve', '--data', directory], stderr: 'pipe' });
+const transport = new StdioClientTransport({ command: process.execPath, args: [fileURLToPath(new URL('../src/cli.js', import.meta.url)), 'serve', '--provider', 'fake', '--data', directory], stderr: 'pipe' });
 const call = async (name, args) => {
   const result = await client.callTool({ name, arguments: args });
   if (result.isError) throw new Error(result.content[0].text);

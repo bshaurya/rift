@@ -59,7 +59,7 @@ Live Google Calendar and Gemini calls, full Electron UI launch, native dependenc
 
 ## Authorship
 
-The existing Rift application is the work of its repository contributors, including bshaurya. This local calendar reliability slice, tests, fake demo, CI workflow, and documentation were generated with Codex AI assistance and require maintainer review. No commit, push, publication, live calendar mutation, or email send was performed during implementation.
+The existing Rift application is the work of its repository contributors, including bshaurya. This local calendar reliability slice, tests, fake demo, CI workflow, and documentation were generated with Codex AI assistance and require maintainer review. No live calendar mutation or email send was performed during implementation. Repository changes are proposed through user-authorized GitHub issues and pull requests.
 
 <!-- This document follows common-doc-guidelines.md.
 See github.com/jlevy/practical-prose and review guidelines before editing.

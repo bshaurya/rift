@@ -73,7 +73,10 @@ export class Operations {
     } catch (error) { error.beforeWrite = true; throw error; }
   }
   async propose(value) {
-    const action = validate(value), digest = digestOf(action);
+    let action;
+    try { action = validate(value); }
+    catch (error) { error.publicMessage = error.message; throw error; }
+    const digest = digestOf(action);
     this.recover();
     const existing = this.db.prepare("SELECT id FROM operations WHERE digest=? AND status IN ('proposed','executing','uncertain','succeeded')").get(digest);
     if (existing) return { ...this.get(existing.id), reused: true };
@@ -111,7 +114,7 @@ export class Operations {
     } catch (error) {
       const code = Number(error.response?.status || error.code);
       const known = error.beforeWrite || [400, 401, 403, 404, 422, 429].includes(code);
-      const reason = code === 429 ? 'rate-limit' : [401, 403].includes(code) ? 'auth' : known ? 'rejected-before-or-by-provider' : 'Outcome uncertain. Reconcile before scheduling again.';
+      const reason = code === 429 || error.rateLimited ? 'rate-limit' : [401, 403].includes(code) ? 'auth' : known ? 'rejected-before-or-by-provider' : 'Outcome uncertain. Reconcile before scheduling again.';
       this.db.prepare("UPDATE operations SET status=?, reason=? WHERE id=? AND status IN ('executing','uncertain')").run(known ? 'failed' : 'uncertain', reason, id);
     } finally { clearTimeout(timer); }
     return this.get(id);

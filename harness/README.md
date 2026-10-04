@@ -2,7 +2,9 @@
 
 Rift gives Codex and Claude a shared calendar tool over MCP. The host handles conversation and planning; Rift reads availability, validates structured events, checks conflicts, and records execution after local review. The server has no embedded model, Gemini dependency, or Electron dependency.
 
-This PR supplies the harness and a persistent fake calendar. Headless Google authentication and read-based reconciliation are tracked in [issue #3](https://github.com/bshaurya/rift/issues/3). The fake mode is for testing and never contacts Google.
+Rift's extra value is the shared operation record: a proposal made in Claude can be inspected in Codex, approved locally, and checked again after either host restarts. It deduplicates the same action across clients and preserves uncertainty instead of silently retrying calendar insertion. Basic calendar access alone is not its differentiator. A useful daily-workflow evaluation still requires comparing this review flow against the host's existing calendar tools; offline tests do not establish that it saves time.
+
+The harness supports a persistent fake calendar and a headless Google Calendar provider. Fake mode is for testing and never contacts Google. Google is the default provider and requires local authentication before startup.
 
 ## Install and Connect
 
@@ -22,6 +24,35 @@ claude mcp add --transport stdio rift -- node /absolute/path/rift/harness/src/cl
 ```
 
 These commands follow the official [Codex MCP configuration](https://developers.openai.com/codex/mcp) and [Claude Code MCP setup](https://code.claude.com/docs/en/mcp) documentation. The project is a local MCP integration, not a published marketplace plugin. No host configuration is modified by installation or tests.
+
+## Connect a Real Calendar
+
+1. Enable Google Calendar API in your Google Cloud project and configure an OAuth consent screen. While the application is in testing, add your Google account as a test user.
+2. Create an OAuth client with application type **Desktop app**. Download its JSON file and keep it outside this checkout.
+3. Authenticate from your own local terminal using a separate state directory from fake mode:
+
+```sh
+node /absolute/path/rift/harness/src/cli.js auth --client /absolute/path/desktop-client.json --data /absolute/path/rift-google-state
+```
+
+Open the printed Google URL in your browser, sign in, and grant the requested calendar read/event permissions. The callback binds only to `127.0.0.1` on a random port, verifies state, and exchanges a S256 PKCE verifier. This follows [Google's desktop OAuth guidance](https://developers.google.com/identity/protocols/oauth2/native-app). Credentials are written to a private file in the state directory. Rift checks both logical and physical path ancestry, resolves symlinks and existing ancestors of missing directories, rejects dangling aliases, and rejects credential directories inside a Git checkout and binds the operation database to the authenticated primary calendar.
+
+Register the live provider with the same state directory in both hosts:
+
+```sh
+codex mcp add rift -- node /absolute/path/rift/harness/src/cli.js serve --provider google --data /absolute/path/rift-google-state
+claude mcp add --transport stdio rift -- node /absolute/path/rift/harness/src/cli.js serve --provider google --data /absolute/path/rift-google-state
+```
+
+Restart the MCP clients after authentication or reauthentication. Review a live proposal separately:
+
+```sh
+node /absolute/path/rift/harness/src/cli.js review OPERATION_ID --provider google --data /absolute/path/rift-google-state
+```
+
+The live provider lists paginated events, reads free/busy information, and inserts exactly the reviewed resource using the operation ID as the Google event ID. Native fetch issues a single insertion request, with no transport retry or automatic OAuth replay of that write. Authentication refresh occurs before the request.
+
+## Prepare an Event
 
 Ask your host:
 
@@ -64,7 +95,17 @@ Exact proposals with an active or succeeded action fingerprint are reused rather
 
 The database and fake calendar contain private event data and use restricted file permissions. Keep the state directory outside repositories and shared folders. Back up or remove it only after reviewing uncertain operations. SQLite is a built-in Node feature and may emit an experimental warning on stderr in supported Node versions; stdout is reserved for MCP messages.
 
-The scripted demo runs a real MCP client and server, finds availability, persists a proposal, simulates local approval against the fake calendar, and verifies a succeeded outcome and duplicate reuse. It does not demonstrate human approval or live Google access. Tests cover real protocol calls, schema rejection, piped review rejection, conflicts, cancellation, expiry, profile isolation, reopen/recovery, timeout reconciliation, and simultaneous reviewer processes. Actual Codex/Claude sessions and live calendar access remain unverified.
+The scripted demo runs a real MCP client and server, finds availability, persists a proposal, simulates local approval against the fake calendar, and verifies a succeeded outcome and duplicate reuse. It simulates approval and does not demonstrate human approval or live Google access. Tests cover two independent MCP hosts sharing one proposal and outcome, real protocol calls, schema rejection, piped review rejection, conflicts, cancellation, expiry, profile isolation, reopen/recovery, timeout reconciliation, and simultaneous reviewer processes. Provider tests verify request payloads, pagination, availability failures, auth rejection, quota/rate-limit errors, no write replay, and GET-only reconciliation. OAuth callback tests use a fake listener to verify state, PKCE, denial, timeout, and duplicate callback handling. Review tests simulate interactive input. Actual Codex/Claude sessions, browser OAuth consent, and live calendar access remain unverified.
+
+## Recover an Uncertain Outcome
+
+Ask the host to call `rift_reconcile`, or run:
+
+```sh
+node /absolute/path/rift/harness/src/cli.js reconcile OPERATION_ID --provider google --data /absolute/path/rift-google-state
+```
+
+Rift reads the provider's deterministic event ID. A found event records success. A not-found or cancelled event leaves the operation uncertain because a timed-out request may still complete. The tool never reinserts an event. Exact proposals remain deduplicated while uncertain. If the event is absent and you need to proceed, inspect the calendar and operation manually; this MVP has no force-retry or uncertainty-dismissal command.
 
 ## Authorship
 
