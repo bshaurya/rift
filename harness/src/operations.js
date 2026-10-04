@@ -67,8 +67,10 @@ export class Operations {
     return { timeZone: range.timeZone, freeWindows: windows, suggestedSlots: windows.filter(w => Date.parse(w.end) - Date.parse(w.start) >= durationMinutes * 60000).slice(0, 20).map(w => ({ start: w.start, end: new Date(Date.parse(w.start) + durationMinutes * 60000).toISOString() })) };
   }
   async checkAvailable(action) {
-    const windows = freeWindows({ timeMin: action.start, timeMax: action.end, timeZone: action.timeZone }, await this.provider.busy({ timeMin: action.start, timeMax: action.end, timeZone: action.timeZone }));
-    if (windows.length !== 1 || Date.parse(windows[0].start) !== Date.parse(action.start) || Date.parse(windows[0].end) !== Date.parse(action.end)) throw Object.assign(new Error('The proposed time overlaps a busy event. Choose another time.'), { beforeWrite: true });
+    try {
+      const windows = freeWindows({ timeMin: action.start, timeMax: action.end, timeZone: action.timeZone }, await this.provider.busy({ timeMin: action.start, timeMax: action.end, timeZone: action.timeZone }));
+      if (windows.length !== 1 || Date.parse(windows[0].start) !== Date.parse(action.start) || Date.parse(windows[0].end) !== Date.parse(action.end)) throw Object.assign(new Error('The proposed time overlaps a busy event. Choose another time.'), { publicMessage: 'The proposed time overlaps a busy event. Read availability and choose another time.' });
+    } catch (error) { error.beforeWrite = true; throw error; }
   }
   async propose(value) {
     const action = validate(value), digest = digestOf(action);
@@ -92,16 +94,17 @@ export class Operations {
     if (digest !== record.digest || digestOf(validate(record.action)) !== digest) throw new Error('Altered proposal.');
     const claim = this.db.prepare("UPDATE operations SET status='executing', deadline=? WHERE id=? AND digest=? AND status='proposed' AND expiresAt>?").run(this.now() + this.timeoutMs, id, digest, this.now());
     if (claim.changes !== 1) return this.get(id);
-    let timer;
+    let timer, insertionStarted = false;
     const controller = new AbortController();
     try {
       const event = await Promise.race([
         (async () => {
           await this.checkAvailable(record.action);
           controller.signal.throwIfAborted();
+          insertionStarted = true;
           return this.provider.create(record.action, id.replaceAll('-', ''), controller.signal);
         })(),
-        new Promise((_, reject) => { timer = setTimeout(() => { controller.abort(); reject(new Error('Execution timed out')); }, this.timeoutMs); })
+        new Promise((_, reject) => { timer = setTimeout(() => { controller.abort(); reject(Object.assign(new Error('Execution timed out'), { beforeWrite: !insertionStarted })); }, this.timeoutMs); })
       ]);
       if (!event?.id) throw new Error('Provider did not acknowledge an event ID.');
       this.db.prepare("UPDATE operations SET status='succeeded', eventId=?, reason=NULL WHERE id=? AND status IN ('executing','uncertain')").run(event.id, id);
@@ -109,7 +112,7 @@ export class Operations {
       const code = Number(error.response?.status || error.code);
       const known = error.beforeWrite || [400, 401, 403, 404, 422, 429].includes(code);
       const reason = code === 429 ? 'rate-limit' : [401, 403].includes(code) ? 'auth' : known ? 'rejected-before-or-by-provider' : 'Outcome uncertain. Reconcile before scheduling again.';
-      this.db.prepare("UPDATE operations SET status=?, reason=? WHERE id=? AND status='executing'").run(known ? 'failed' : 'uncertain', reason, id);
+      this.db.prepare("UPDATE operations SET status=?, reason=? WHERE id=? AND status IN ('executing','uncertain')").run(known ? 'failed' : 'uncertain', reason, id);
     } finally { clearTimeout(timer); }
     return this.get(id);
   }

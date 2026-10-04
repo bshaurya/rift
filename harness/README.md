@@ -58,7 +58,7 @@ The event schema matches the [calendar gate](../docs/calendar-reliability.md). I
 
 ## Reliability and Limits
 
-SQLite stores operations and uses an atomic claim before execution. Multiple MCP hosts and separate review processes can use one profile. A profile is bound to its provider/account identity; changing accounts requires a separate state directory. Reviewed proposals survive client reconnections for ten minutes. Abandoned execution becomes uncertain after its stored deadline. Provider failure details are not returned to the model.
+SQLite stores operations and uses an atomic claim before execution. Multiple MCP hosts and separate review processes can use one profile. A profile is bound to its provider/account identity; changing accounts requires a separate state directory. Reviewed proposals survive client reconnections for ten minutes. Abandoned execution becomes uncertain after its stored deadline. Read errors, malformed availability, and timeouts before insertion are recorded as known prewrite failures, allowing a newly reviewed proposal after recovery. Timeouts after insertion starts remain uncertain. Provider failure details are not returned to the model.
 
 Exact proposals with an active or succeeded action fingerprint are reused rather than inserted again, including after uncertain outcomes. Cancelled, failed, and stale proposals can be replaced. Conflict checks run before proposal and again before insertion; Google Calendar cannot make that check and insertion one atomic transaction, so another client may still book the slot in between.
 

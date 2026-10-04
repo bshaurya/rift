@@ -31,6 +31,34 @@ test('conflicts reject before proposal and are rechecked before approval', async
   await assert.rejects(operations.propose({ ...action, title: 'Other' }), /overlaps/);
   assert.equal((await operations.approve(p.id, p.digest)).status, 'failed'); assert.equal(calls.length, 0);
 });
+test('read errors and malformed availability fail before creation and allow a fresh review', async t => {
+  for (const failure of ['connection', 'intervals', 'shape']) {
+    const { provider, operations, calls } = fixture(t);
+    const proposal = await operations.propose(action);
+    provider.busy = async () => {
+      if (failure === 'connection') throw Object.assign(new Error('Read connection reset'), { code: 'ECONNRESET' });
+      return failure === 'intervals' ? [{ start: 'invalid', end: 'invalid' }] : null;
+    };
+    assert.equal((await operations.approve(proposal.id, proposal.digest)).status, 'failed', failure);
+    assert.equal(calls.length, 0);
+    provider.busy = async () => [];
+    const replacement = await operations.propose(action);
+    assert.notEqual(replacement.id, proposal.id);
+    assert.equal(replacement.status, 'proposed');
+  }
+});
+test('approval timeout during availability never writes late and allows a fresh review', async t => {
+  const { provider, operations, calls } = fixture(t, { timeoutMs: 5 });
+  const proposal = await operations.propose(action);
+  let finishRead;
+  provider.busy = () => new Promise(resolve => { finishRead = resolve; });
+  assert.equal((await operations.approve(proposal.id, proposal.digest)).status, 'failed');
+  finishRead([]);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(calls.length, 0);
+  provider.busy = async () => [];
+  assert.notEqual((await operations.propose(action)).id, proposal.id);
+});
 test('cancelled, stale and altered proposals never execute', async t => {
   let now = 0; const { operations, calls } = fixture(t, { now: () => now });
   const p = await operations.propose(action); await assert.rejects(operations.approve(p.id, 'bad'));
