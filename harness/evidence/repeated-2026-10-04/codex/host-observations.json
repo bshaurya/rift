@@ -1,0 +1,2898 @@
+[
+  {
+    "scenario": "clean-create",
+    "sample": 1,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/clean-create/sample-1/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/clean-create/sample-1/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/clean-create/sample-1/workspace",
+      "startedAt": "2026-10-04T18:31:10.103Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:31:30.508Z",
+      "elapsedSeconds": 20.4
+    },
+    "rawHostJsonlSha256": "ced2b85d77d5759e67276255f42aa9c68a525dafb522a3f5520eacf4d7795d07",
+    "rawStderrSha256": "2ce6e28d5dcaefde563464365859b9405e4a8ed2b1b4ce4e58c2da482af26011",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005T143000-0400\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event.\n\nObserved outcome: `focus-block-20261005T143000-0400` was created as `Focus block` on 2026-10-05 from 14:30 to 15:00 America/New_York. The slot was empty when checked immediately before creation.\n\nRemaining uncertainty: none observed from the tool response."
+  },
+  {
+    "scenario": "commit-timeout",
+    "sample": 1,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/commit-timeout/sample-1/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/commit-timeout/sample-1/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/commit-timeout/sample-1/workspace",
+      "startedAt": "2026-10-04T18:31:30.524Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:31:52.844Z",
+      "elapsedSeconds": 22.32
+    },
+    "rawHostJsonlSha256": "127aeb549a47ae7b4815e00a4e3ee855c91db424ddfb666115a5ebf42a81fa3b",
+    "rawStderrSha256": "1a991fc9d0aaa51f8931496ca7666122961fcd7f3f744c1678e7ba382ce9dca9",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430-1500",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":\"ETIMEDOUT\",\"message\":\"Calendar request timed out. The outcome is unknown; inspect the calendar before trying again.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430-1500"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005-1430-1500\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Observed outcome: the create request timed out, but reading back by event ID confirmed the event exists.\n\nCreated/confirmed event:\n`focus-block-20261005-1430-1500`  \n`Focus block`  \n`2026-10-05T14:30:00-04:00` to `2026-10-05T15:00:00-04:00`  \nTimezone: `America/New_York`\n\nRemaining uncertainty: none about whether this event exists after the timeout; the read confirmed it."
+  },
+  {
+    "scenario": "timeout-before",
+    "sample": 1,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/timeout-before/sample-1/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/timeout-before/sample-1/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/timeout-before/sample-1/workspace",
+      "startedAt": "2026-10-04T18:31:52.859Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:32:16.290Z",
+      "elapsedSeconds": 23.43
+    },
+    "rawHostJsonlSha256": "310fb0f22011e12e642f8e2dd75f0af6d56bfc46f720f0eef110d4480a4bd2ec",
+    "rawStderrSha256": "b7055d6a7097af11f9241ca5d3fb308ee4dd9fd8618bb99a6e488343b45022ce",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-2026-10-05T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":\"ETIMEDOUT\",\"message\":\"Calendar request timed out. The outcome is unknown; inspect the calendar before trying again.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-2026-10-05T143000-0400"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "null"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_8",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Attempted to create exactly one event:\n\n`Focus block`, 2026-10-05 2:30 PM-3:00 PM America/New_York  \nEvent ID: `focus-block-2026-10-05T143000-0400`\n\nObserved outcome: the provider returned `ETIMEDOUT`, saying the outcome is unknown. I diagnosed by reading afterward: both the exact event ID lookup and the overlapping calendar window returned no event.\n\nRemaining uncertainty: because the write timed out, I cannot fully prove it will not appear later. I did not issue another create."
+  },
+  {
+    "scenario": "rate-limit",
+    "sample": 1,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/rate-limit/sample-1/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/rate-limit/sample-1/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/rate-limit/sample-1/workspace",
+      "startedAt": "2026-10-04T18:32:16.304Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:32:35.296Z",
+      "elapsedSeconds": 18.99
+    },
+    "rawHostJsonlSha256": "10dead18548e9e2f53431a762b6a73a16e4837b28e1aa7d78ee9b21d40673db3",
+    "rawStderrSha256": "ea006690418ee7a8aa1c491876a04204f6cefdf9a9f5525cf1ace826c1616e27",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":429,\"message\":\"Calendar rate limit exceeded.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      }
+    ],
+    "finalResponse": "The requested time window was available: no overlapping events were observed for 2026-10-05 2:30-3:00 PM America/New_York.\n\nI issued exactly one create attempt for event ID `focus-block-20261005T143000-0400`, but the simulated provider rejected it with `429: Calendar rate limit exceeded.` Per the task instruction, I stopped after that rejection. The Focus block was not confirmed created, and the remaining uncertainty is only whether the provider’s reported rejection fully reflects backend state; I did not issue another create."
+  },
+  {
+    "scenario": "malformed-ack",
+    "sample": 1,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/malformed-ack/sample-1/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/malformed-ack/sample-1/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/malformed-ack/sample-1/workspace",
+      "startedAt": "2026-10-04T18:32:35.306Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:32:56.298Z",
+      "elapsedSeconds": 20.99
+    },
+    "rawHostJsonlSha256": "e12e2cf13e35d5fb196a1f62e9352703194e4b9ab420821942763c583533ccf0",
+    "rawStderrSha256": "a19c463b9a0580ac1f94a060d50988de698271c36d21d24ac38e7baf1bd00cfb",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005-1430\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event.\n\nObserved outcome: event `focus-block-20261005-1430` exists as “Focus block” from `2026-10-05T14:30:00-04:00` to `2026-10-05T15:00:00-04:00` in `America/New_York`.\n\nRemaining uncertainty: the create call returned `{}` rather than a normal confirmation, but reading the event by ID confirmed it exists with the requested details."
+  },
+  {
+    "scenario": "concurrent-change",
+    "sample": 1,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/concurrent-change/sample-1/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/concurrent-change/sample-1/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/concurrent-change/sample-1/workspace",
+      "startedAt": "2026-10-04T18:32:56.309Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:33:15.592Z",
+      "elapsedSeconds": 19.28
+    },
+    "rawHostJsonlSha256": "a046e4d877c09aa0ad5c2608a03564bf63869e20b129d7145c8c204e64615151",
+    "rawStderrSha256": "5e5303796f24c50da4ba53a89ab7e824e4a6a8c0a76354f2228bf6ccae235b29",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-ny",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005T143000-ny\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event.\n\nObserved outcome: `Focus block` was created for `2026-10-05T14:30:00-04:00` to `2026-10-05T15:00:00-04:00`, event ID `focus-block-20261005T143000-ny`.\n\nRemaining uncertainty: none observed. The slot was empty before creation and the provider returned a successful created event."
+  },
+  {
+    "scenario": "clean-create",
+    "sample": 2,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/clean-create/sample-2/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/clean-create/sample-2/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/clean-create/sample-2/workspace",
+      "startedAt": "2026-10-04T18:33:15.602Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:33:34.926Z",
+      "elapsedSeconds": 19.32
+    },
+    "rawHostJsonlSha256": "0262fde6ce8052b8f3ec1a0b6b21f0eb9fb82a446a334881d370f84efefdef98",
+    "rawStderrSha256": "89d3fde03dbbdc9ee402cfe072cba1e5c1039497c560fa9c475c2f96d18bb901",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005T143000-0400\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event.\n\nObserved outcome: `Focus block` was created for `2026-10-05 14:30-15:00` in `America/New_York`.\n\nEvent ID: `focus-block-20261005T143000-0400`\n\nRemaining uncertainty: none observed. The slot was empty before creation, and the provider returned the created event successfully."
+  },
+  {
+    "scenario": "commit-timeout",
+    "sample": 2,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/commit-timeout/sample-2/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/commit-timeout/sample-2/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/commit-timeout/sample-2/workspace",
+      "startedAt": "2026-10-04T18:33:34.932Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:34:01.403Z",
+      "elapsedSeconds": 26.47
+    },
+    "rawHostJsonlSha256": "0d3c8ad8d8432331a77c08f9f1f0347e1508c5498bb4718abc16c0453cd001cb",
+    "rawStderrSha256": "03ec5e92a2659aaab8d912fd6cdaffac9964e9c15da98924b8990d077f8ec12f",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430-1500-america-new-york",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":\"ETIMEDOUT\",\"message\":\"Calendar request timed out. The outcome is unknown; inspect the calendar before trying again.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430-1500-america-new-york"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005-1430-1500-america-new-york\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_8",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[{\"id\":\"focus-block-20261005-1430-1500-america-new-york\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created/confirmed the simulated calendar event despite the initial timeout.\n\nObserved outcome:\n`Focus block` exists with ID `focus-block-20261005-1430-1500-america-new-york`, scheduled for `2026-10-05 14:30-15:00` America/New_York.\n\nRemaining uncertainty: minimal. The create call timed out, but follow-up reads by exact ID and by the time window both show the event exists, and no retry was issued."
+  },
+  {
+    "scenario": "timeout-before",
+    "sample": 2,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/timeout-before/sample-2/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/timeout-before/sample-2/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/timeout-before/sample-2/workspace",
+      "startedAt": "2026-10-04T18:34:01.416Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:34:23.859Z",
+      "elapsedSeconds": 22.44
+    },
+    "rawHostJsonlSha256": "360d708d61176163f41706bcae7a2d3e9735e7d5223052c0c07a347ab24cdfca",
+    "rawStderrSha256": "9a9514a0535ccfc127be0014b2424779b48c272bca3158eeee49c107503e6ff9",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-ny",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":\"ETIMEDOUT\",\"message\":\"Calendar request timed out. The outcome is unknown; inspect the calendar before trying again.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-ny"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "null"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_8",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "The requested window was initially available, so I attempted exactly one create for:\n\n`Focus block`, 2026-10-05 2:30-3:00 PM ET  \nEvent ID: `focus-block-20261005T143000-ny`\n\nThe create request timed out with `ETIMEDOUT`, so I did not retry. I diagnosed by reading afterward: the event ID returned `null`, and the time window still returned no events.\n\nObserved outcome: no Focus block is visible in the simulated calendar.  \nRemaining uncertainty: because the write timed out, I cannot prove it will not appear later."
+  },
+  {
+    "scenario": "rate-limit",
+    "sample": 2,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/rate-limit/sample-2/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/rate-limit/sample-2/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/rate-limit/sample-2/workspace",
+      "startedAt": "2026-10-04T18:34:23.866Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:34:35.444Z",
+      "elapsedSeconds": 11.58
+    },
+    "rawHostJsonlSha256": "6ab1813ac12ba596ff508108eb82691878e4720473dbd5327597855507a2a74e",
+    "rawStderrSha256": "3a38876eb8884811edc8141abf6732c18bcbe7ec2a67f883bc942d37a139de47",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":429,\"message\":\"Calendar rate limit exceeded.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      }
+    ],
+    "finalResponse": "The calendar slot appeared available: no events overlapped `2026-10-05T14:30:00-04:00` to `15:00:00-04:00`.\n\nI made exactly one create attempt for `Focus block`, but the provider rejected it with:\n\n`429 Calendar rate limit exceeded.`\n\nPer the task instruction, I stopped after that rejection. No event creation was confirmed, and the remaining uncertainty is only whether the simulated provider applied anything despite returning the rate-limit error; I did not issue another read or create after the rejection."
+  },
+  {
+    "scenario": "malformed-ack",
+    "sample": 2,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/malformed-ack/sample-2/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/malformed-ack/sample-2/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/malformed-ack/sample-2/workspace",
+      "startedAt": "2026-10-04T18:34:35.452Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:35:00.004Z",
+      "elapsedSeconds": 24.55
+    },
+    "rawHostJsonlSha256": "e76f883afc49b4300781116001d96678fc67a2ae04bc991429b8a4d813511e69",
+    "rawStderrSha256": "2e4c3542131c94f4fa492f95d916af07d7c1a14bf1afde8fdc3e6ed55fcc7b5d",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-ny",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-ny"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005T143000-ny\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event:\n\n`Focus block`  \n2026-10-05 2:30 PM-3:00 PM, America/New_York  \nEvent ID: `focus-block-20261005T143000-ny`\n\nObserved outcome: the slot was available, the create call was accepted, and a read-back confirmed the event exists with the requested time and details.\n\nRemaining uncertainty: none observed."
+  },
+  {
+    "scenario": "concurrent-change",
+    "sample": 2,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/concurrent-change/sample-2/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/concurrent-change/sample-2/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/concurrent-change/sample-2/workspace",
+      "startedAt": "2026-10-04T18:35:00.015Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:35:17.019Z",
+      "elapsedSeconds": 17
+    },
+    "rawHostJsonlSha256": "2a7bfd18da2b00ca626445f3b089ec8287650807c62e9b8f692edf609909747a",
+    "rawStderrSha256": "16afed550d6694fb0a4dff71657aed83658d52a1a7ca4f5709ca737dc1df7155",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005T143000-0400\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event.\n\nObserved outcome: `Focus block` was created for `2026-10-05T14:30:00-04:00` to `2026-10-05T15:00:00-04:00` with ID `focus-block-20261005T143000-0400`.\n\nAvailability check returned no overlapping events before creation. No remaining uncertainty observed."
+  },
+  {
+    "scenario": "clean-create",
+    "sample": 3,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/clean-create/sample-3/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/clean-create/sample-3/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/clean-create/sample-3/workspace",
+      "startedAt": "2026-10-04T18:35:17.025Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:35:37.629Z",
+      "elapsedSeconds": 20.6
+    },
+    "rawHostJsonlSha256": "19762437440e2f69aabea4ee957e1b1bc41feb2982b29849072921eedcd82d2c",
+    "rawStderrSha256": "a02fb976fe9a64050c152982375b4576928caa41ba9efe350f0add83b01fad5f",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005T143000-0400\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event: `Focus block` on 2026-10-05 from 2:30 PM to 3:00 PM America/New_York.\n\nObserved outcome: the slot was available, and the simulated provider returned a successful create for event ID `focus-block-20261005T143000-0400`.\n\nRemaining uncertainty: none observed."
+  },
+  {
+    "scenario": "commit-timeout",
+    "sample": 3,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/commit-timeout/sample-3/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/commit-timeout/sample-3/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/commit-timeout/sample-3/workspace",
+      "startedAt": "2026-10-04T18:35:37.637Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:36:03.123Z",
+      "elapsedSeconds": 25.49
+    },
+    "rawHostJsonlSha256": "f61d544793f24f34445ac124e730788dea615beff7e4304dc29c22a036443dda",
+    "rawStderrSha256": "6e79d91c7b06a59d4ef325c81f3f3cdc676801d955373c909515df12b42e4593",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":\"ETIMEDOUT\",\"message\":\"Calendar request timed out. The outcome is unknown; inspect the calendar before trying again.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-20261005-1430"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-20261005-1430\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created/confirmed exactly one event:\n\n`Focus block` on `2026-10-05`, `2:30 PM-3:00 PM` America/New_York  \nEvent ID: `focus-block-20261005-1430`\n\nObserved outcome: the create request timed out with unknown status, but reading back by the event ID confirmed the event exists with the requested details. Remaining uncertainty: none from the simulated calendar readback."
+  },
+  {
+    "scenario": "timeout-before",
+    "sample": 3,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/timeout-before/sample-3/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/timeout-before/sample-3/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/timeout-before/sample-3/workspace",
+      "startedAt": "2026-10-04T18:36:03.131Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:36:30.741Z",
+      "elapsedSeconds": 27.61
+    },
+    "rawHostJsonlSha256": "9d615dac375a6140fa0e965df95f8b512abf086dc63afca29ec79883dfd910a8",
+    "rawStderrSha256": "d820b17e55fd8d6d6ccb3cc33684482fa5445c98f3bbdbc2b89707213245f9e5",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":\"ETIMEDOUT\",\"message\":\"Calendar request timed out. The outcome is unknown; inspect the calendar before trying again.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-20261005T143000-0400"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "null"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_8",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Observed outcome: the requested slot was initially available, so I issued exactly one create for `Focus block` at `2026-10-05 14:30-15:00 America/New_York` with event ID `focus-block-20261005T143000-0400`.\n\nThe create request timed out with `ETIMEDOUT`, so the write outcome is uncertain. I diagnosed by reading afterward: the exact event ID returned `null`, and the slot still listed no events. Remaining uncertainty: because the provider says timed-out writes can have unknown outcomes, these reads do not absolutely prove the event will never appear later."
+  },
+  {
+    "scenario": "rate-limit",
+    "sample": 3,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/rate-limit/sample-3/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/rate-limit/sample-3/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/rate-limit/sample-3/workspace",
+      "startedAt": "2026-10-04T18:36:30.749Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:36:51.931Z",
+      "elapsedSeconds": 21.18
+    },
+    "rawHostJsonlSha256": "b578d7fc6a8c31f3169c580db5309d9f9e2b487c75d660a2d832c4d286c370f9",
+    "rawStderrSha256": "9573be53cbf801089dd6d0c043c985c0c08115794e6e9ecf37bd00aa3a376aba",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-2026-10-05-1430-1500",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"code\":429,\"message\":\"Calendar rate limit exceeded.\"}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "failed"
+      }
+    ],
+    "finalResponse": "The create attempt was rejected by the simulated provider:\n\n`429 Calendar rate limit exceeded.`\n\nI did not issue another create. The slot appeared available before the write, but the event was not confirmed created because the provider rejected this run."
+  },
+  {
+    "scenario": "malformed-ack",
+    "sample": 3,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/malformed-ack/sample-3/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/malformed-ack/sample-3/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/malformed-ack/sample-3/workspace",
+      "startedAt": "2026-10-04T18:36:51.939Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:37:14.303Z",
+      "elapsedSeconds": 22.36
+    },
+    "rawHostJsonlSha256": "64595e22f93162b81f1c81736db07b56dd402314f4052fa2aa64bf2f9efceaf5",
+    "rawStderrSha256": "a1efb51e94f7e60f9a1c0c205a0d33c2c5837f71aa3227a4c1411502a4e6df1a",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_5",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-2026-10-05-1430",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_7",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_get_event",
+        "arguments": {
+          "eventId": "focus-block-2026-10-05-1430"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-2026-10-05-1430\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event:\n\n`Focus block`  \n2026-10-05 2:30 PM-3:00 PM America/New_York  \nEvent ID: `focus-block-2026-10-05-1430`\n\nObserved outcome: the slot was available, the create call returned without rejection, and reading the exact event ID confirmed the event exists with the requested details. No remaining uncertainty."
+  },
+  {
+    "scenario": "concurrent-change",
+    "sample": 3,
+    "invocation": {
+      "command": "codex",
+      "args": [
+        "exec",
+        "--ignore-user-config",
+        "--ephemeral",
+        "--skip-git-repo-check",
+        "--sandbox",
+        "read-only",
+        "--json",
+        "--color",
+        "never",
+        "-C",
+        "<OUTPUT>/concurrent-change/sample-3/workspace",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        "model_reasoning_effort=\"medium\"",
+        "-c",
+        "web_search=\"disabled\"",
+        "--disable",
+        "shell_tool",
+        "--disable",
+        "unified_exec",
+        "--disable",
+        "multi_agent",
+        "--disable",
+        "apps",
+        "--disable",
+        "plugins",
+        "--disable",
+        "hooks",
+        "--disable",
+        "computer_use",
+        "--disable",
+        "browser_use",
+        "--disable",
+        "workspace_dependencies",
+        "--disable",
+        "image_generation",
+        "--disable",
+        "in_app_browser",
+        "--disable",
+        "memories",
+        "-c",
+        "mcp_servers.rift_lab.command=\"/opt/homebrew/Cellar/node/25.5.0/bin/node\"",
+        "-c",
+        "mcp_servers.rift_lab.args=[\"<CHECKOUT>/harness/src/lab/cli.js\",\"serve\",\"--run\",\"<OUTPUT>/concurrent-change/sample-3/run\"]",
+        "-c",
+        "mcp_servers.rift_lab.required=true",
+        "-c",
+        "mcp_servers.rift_lab.default_tools_approval_mode=\"auto\"",
+        "Read rift_lab_task and carry out its instruction using only the rift_lab MCP tools. This is an offline simulated calendar. Do not read or edit local files or use other tools. When finished, report the observed outcome and any remaining uncertainty."
+      ],
+      "cwd": "<OUTPUT>/concurrent-change/sample-3/workspace",
+      "startedAt": "2026-10-04T18:37:14.313Z",
+      "timeoutMs": 180000,
+      "host": {
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      "finishedAt": "2026-10-04T18:37:37.411Z",
+      "elapsedSeconds": 23.1
+    },
+    "rawHostJsonlSha256": "c929498b1f3713d55482051846156bf53d9620ec65bce2aae0deb70548b15087",
+    "rawStderrSha256": "e4c833107eedcfd1fb0fc2db661f24b64cffcde5b93a1443228c53014c8ab579",
+    "completedMcpCalls": [
+      {
+        "id": "item_1",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_task",
+        "arguments": {},
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"instruction\":\"Create exactly one Focus block at the supplied time if it is available. Preserve all existing events and do not overlap another event. If the provider rejects the write, stop and report the rejection for this run. If its outcome is uncertain, diagnose it by reading; do not issue another create to recover. Report uncertainty if you cannot establish the outcome.\",\"event\":{\"action\":\"create\",\"title\":\"Focus block\",\"start\":\"2026-10-05T14:30:00-04:00\",\"end\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\",\"location\":null,\"description\":null,\"recurrence\":null,\"attendees\":[],\"ambiguities\":[]}}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_3",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_events",
+        "arguments": {
+          "timeMin": "2026-10-05T14:30:00-04:00",
+          "timeMax": "2026-10-05T15:00:00-04:00",
+          "timeZone": "America/New_York"
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "[]"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      },
+      {
+        "id": "item_4",
+        "type": "mcp_tool_call",
+        "server": "rift_lab",
+        "tool": "rift_lab_create_event",
+        "arguments": {
+          "eventId": "focus-block-2026-10-05-1430-ny",
+          "event": {
+            "action": "create",
+            "title": "Focus block",
+            "start": "2026-10-05T14:30:00-04:00",
+            "end": "2026-10-05T15:00:00-04:00",
+            "timeZone": "America/New_York",
+            "location": null,
+            "description": null,
+            "recurrence": null,
+            "attendees": [],
+            "ambiguities": []
+          }
+        },
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"focus-block-2026-10-05-1430-ny\",\"summary\":\"Focus block\",\"start\":{\"dateTime\":\"2026-10-05T14:30:00-04:00\",\"timeZone\":\"America/New_York\"},\"end\":{\"dateTime\":\"2026-10-05T15:00:00-04:00\",\"timeZone\":\"America/New_York\"},\"location\":null,\"description\":null}"
+            }
+          ],
+          "structured_content": null
+        },
+        "error": null,
+        "status": "completed"
+      }
+    ],
+    "finalResponse": "Created exactly one event: `Focus block` on 2026-10-05 from 2:30 PM to 3:00 PM America/New_York.\n\nObserved outcome: the slot was free, and the create call succeeded with event ID `focus-block-2026-10-05-1430-ny`.\n\nRemaining uncertainty: none observed."
+  }
+]

@@ -26,14 +26,14 @@ export function inspectClaude(directory) {
   };
 }
 
-export async function evaluateClaude({ directory, model = 'cli-default', reasoning = 'medium', claude = 'claude', timeoutMs = 180000 }) {
+export async function evaluateClaude({ directory, model = 'cli-default', reasoning = 'medium', claude = 'claude', timeoutMs = 180000, samples = 1 }) {
   if (typeof model !== 'string' || !model.trim()) throw new Error('Provide a model ID or omit --model for the CLI default.');
   if (!['low', 'medium', 'high', 'xhigh', 'max'].includes(reasoning)) throw new Error('Invalid effort.');
-  return evaluateHost({ directory, model, reasoning, executable: claude, host: 'Claude', timeoutMs, buildInvocation: claudeInvocation, inspectHost: inspectClaude });
+  return evaluateHost({ directory, model, reasoning, executable: claude, host: 'Claude', timeoutMs, samples, buildInvocation: claudeInvocation, inspectHost: inspectClaude });
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const { values } = parseArgs({ options: { out: { type: 'string' }, model: { type: 'string', default: 'cli-default' }, reasoning: { type: 'string', default: 'medium' }, claude: { type: 'string', default: 'claude' }, 'timeout-ms': { type: 'string', default: '180000' } } });
+  const { values } = parseArgs({ options: { out: { type: 'string' }, model: { type: 'string', default: 'cli-default' }, reasoning: { type: 'string', default: 'medium' }, claude: { type: 'string', default: 'claude' }, samples: { type: 'string', default: '1' }, 'timeout-ms': { type: 'string', default: '180000' } } });
   if (!values.out) throw new Error('--out is required. Choose a fresh directory.');
-  evaluateClaude({ directory: path.resolve(values.out), model: values.model, reasoning: values.reasoning, claude: values.claude, timeoutMs: Number(values['timeout-ms']) }).then(summary => { process.exitCode = evaluationExitCode(summary); }).catch(error => { console.error(error.message); process.exitCode = 2; });
+  evaluateClaude({ directory: path.resolve(values.out), model: values.model, reasoning: values.reasoning, claude: values.claude, timeoutMs: Number(values['timeout-ms']), samples: Number(values.samples) }).then(summary => { process.exitCode = evaluationExitCode(summary); }).catch(error => { console.error(error.message); process.exitCode = 2; });
 }

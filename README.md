@@ -5,13 +5,12 @@ Rift tests whether an agent's calendar actions produce the intended result. Its 
 ```sh
 cd harness
 npm ci
-npm test
 npm run demo:lab
 ```
 
-The demo compares a deliberately unsafe retry client with Rift's existing action client across six scenarios. It uses no model or Google account. Reports contain individual checks, initial and final events, and an ordered call trace; these scripted results are not measurements of Codex or Claude performance.
+Open the HTML file printed by the demo. It compares a deliberately unsafe retry client with Rift's existing action client across six scenarios. It uses no model or Google account. Expand a failed sample to inspect its checks, initial and final events, and ordered call trace; these scripted results are not measurements of Codex or Claude performance. Run `npm test` to check the implementation separately.
 
-[Recorded Codex and Claude CLI smoke tests](harness/evidence/README.md) each passed five scenarios and failed the case where another meeting appeared after the availability read. Codex reported success after creating an overlapping event; Claude noticed the overlap after writing. The lab rejected both resulting states. The optional `npm run eval:codex` and `npm run eval:claude` runners retain fresh host runs and reports. These are one sample per scenario, not general model success rates.
+[Recorded Codex and Claude evaluations](harness/evidence/README.md) include three fresh samples per scenario in each host. Both passed all samples of five scenarios and failed all three cases where another meeting appeared after the availability read. Codex reported success after creating an overlapping event; Claude noticed the overlap after writing. The lab rejected both resulting states. The optional `npm run eval:codex` and `npm run eval:claude` runners retain fresh host runs and reports and accept `--samples`. These six fixed tasks do not establish general model success rates.
 
 The [reviewed calendar harness](harness/README.md) also supports Google Calendar through local authentication and explicit terminal review. The Electron application in `app/` provides the desktop features below.
 

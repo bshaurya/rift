@@ -14,7 +14,7 @@ npm test
 npm run demo:lab
 ```
 
-The demo prints its report directory under `.lab-runs/`. Each run contains `report.json`, `client-result.json`, and its database. Client exceptions are recorded in `client-result.json`, and the evaluator still writes a report and determines the exit status from the checks. Configuration, database, and artifact-writing failures remain runtime errors with exit status `2`. The comparison uses two scripted clients:
+The demo prints a standalone HTML report and its data directory under `.lab-runs/`. Open the HTML file in a browser to compare counts and expand failed checks, calendar snapshots, and individual calls. Each run contains `report.json`, `client-result.json`, and its database. Client exceptions are recorded in `client-result.json`, and the evaluator still writes a report and determines the exit status from the checks. Configuration, database, and artifact-writing failures remain runtime errors with exit status `2`. The comparison uses two scripted clients:
 
 - `naive-retry` checks availability once, then retries an uncertain creation with a new event ID.
 - `rift` calls the existing `Operations` implementation: propose, execute after simulated approval, and reconcile an uncertain outcome by ID. This test driver does not exercise a human approval interaction.
@@ -72,6 +72,23 @@ Claude runs in restricted mode with built-in tools disabled, user/project settin
 The runner retains streamed host messages and the connected MCP/tool surface. It requires a completion record and records CLI-reported errors as runtime failures even if the process exits zero. Task outcomes still come from the resource evaluator. The exit status and output-preservation rules match the Codex runner.
 
 Host system prompts and effort semantics differ. Identical task prompts and fixtures do not make a small smoke test a controlled model ranking.
+
+## Repeat and Review Host Runs
+
+Both optional runners accept `--samples N`, an integer from 1 to 20, defaulting to 1. A sample is a fresh host process, workspace, and initialized calendar, not a retry of a failed task. The runner completes a round of all six scenarios before starting the next round. Failed task checks remain in the results; runtime failures stop further launches.
+
+```sh
+npm run eval:codex -- --model YOUR_SUPPORTED_MODEL --samples 3 --out .lab-runs/codex-repeated
+npm run eval:claude -- --samples 3 --out .lab-runs/claude-repeated
+npm run lab -- report --run .lab-runs/codex-repeated --out .lab-runs/codex-repeated.html
+npm run lab -- report --run .lab-runs/claude-repeated --out .lab-runs/claude-repeated.html
+```
+
+Each summary records the requested scenario plan and sample count, along with per-scenario and total pass, fail, runtime-error, and not-run counts. A failed startup in a requested 18-sample suite produces one runtime error and 17 not-run samples, not 17 task failures. An incomplete suite cannot exit successfully. Multiple samples live under `<scenario>/sample-N/`; a single sample retains the `<scenario>/` layout.
+
+The report command renders saved evaluator reports without making model calls or rerunning tasks. It rejects duplicate samples, inconsistent outcomes, and mixed scenario definitions. Its HTML contains no scripts or remote resources and does not overwrite an existing file. Missing or invalid evidence is an error, rather than a passing sample. HTML generation exits `0` even when the displayed tasks failed; use the evaluation runner's status and report counts for the task verdict. `lab check --run` remains the command for independently grading a retained run database.
+
+Repeated samples can reveal variations within these fixed tasks. They still do not establish reliability on other providers, prompts, model configurations, or scheduling workflows. Inference consumes your CLI account's usage for every launched sample; the offline demo requires neither model credentials nor paid inference.
 
 ## Connect an Agent
 

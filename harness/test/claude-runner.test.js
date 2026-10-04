@@ -57,3 +57,26 @@ test('missing Claude completion or disconnected lab is not a successful host run
   fs.appendFileSync(file, JSON.stringify({ type: 'result', subtype: 'success', is_error: false }) + '\n');
   assert.equal(inspectClaude(directory).resultError, true);
 });
+
+test('repeated samples preserve every failure in fresh processes and calendars', { skip: os.platform() === 'win32' }, async t => {
+  const { directory, claude } = fixture(t);
+  const output = path.join(directory, 'repeated');
+  const summary = await evaluateClaude({ directory: output, claude, samples: 3 });
+  assert.equal(summary.results.length, 18);
+  assert.deepEqual(summary.counts.total, { passed: 0, failed: 18, runtimeErrors: 0, notRun: 0, total: 18 });
+  assert.equal(new Set(summary.results.map(result => result.report)).size, 18);
+  for (const result of summary.results) {
+    const report = JSON.parse(fs.readFileSync(path.join(output, result.report)));
+    assert.match(report.client.label, new RegExp(`sample ${result.sample}$`));
+    assert.equal(report.trace.length, 0);
+    assert.deepEqual(report.initialState, report.finalState);
+    assert.equal(summary.counts.byScenario[result.scenario].failed, 3);
+  }
+  for (const samples of [0, 1.5, 21, NaN]) await assert.rejects(evaluateClaude({ directory: path.join(directory, `invalid-${samples}`), claude, samples }), /Samples/);
+});
+
+test('a repeated evaluation stops on runtime failure and counts unattempted samples', { skip: os.platform() === 'win32' }, async t => {
+  const { directory, claude } = fixture(t, { subtype: 'error_max_turns', is_error: true });
+  const summary = await evaluateClaude({ directory: path.join(directory, 'repeated'), claude, samples: 3 });
+  assert.deepEqual(summary.counts.total, { passed: 0, failed: 0, runtimeErrors: 1, notRun: 17, total: 18 });
+});
